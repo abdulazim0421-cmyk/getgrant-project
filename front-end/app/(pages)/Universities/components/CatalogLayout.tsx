@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { SlidersHorizontal } from "lucide-react";
 import FilterSidebar, { type Filters } from "./FilterSidebar";
 import UniversityGrid from "./UniversityGrid";
 
@@ -14,42 +13,40 @@ const DEFAULT_FILTERS: Filters = {
 
 const PAGE_SIZE = 6;
 
-// Принимаем реальные данные из Strapi через props
-export default function CatalogLayout({ universities = [] }: { universities: any[] }) {
+export default function CatalogLayout({ initialUniversities = [] }: { initialUniversities: any[] }) {
     const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-    const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
     const filtered = useMemo(() => {
-        return universities.filter((u) => {
-            // В Strapi все поля лежат внутри u.attributes
-            const attr = u.attributes;
-            if (!attr) return false;
-
-            // Фильтр по названию
+        return initialUniversities.filter((uni) => {
+            // 1. Поиск по имени
             if (
                 filters.search &&
-                !attr.name?.toLowerCase().includes(filters.search.toLowerCase())
-            )
+                !uni.name?.toLowerCase().includes(filters.search.toLowerCase())
+            ) {
                 return false;
+            }
 
-            // Фильтр по странам
-            if (
-                filters.countries.length &&
-                !filters.countries.includes(attr.country) // Используем прямое поле country из вашей структуры
-            )
+            // 2. Фильтр по странам (работает напрямую с твоим интерфейсом location.country)
+            if (filters.countries?.length > 0) {
+                if (!uni.location?.country || !filters.countries.includes(uni.location.country)) {
+                    return false;
+                }
+            }
+
+            // 3. Фильтр по типу университета
+            if (filters.types?.length > 0 && !filters.types.includes(uni.type)) {
                 return false;
+            }
 
-            // Фильтр по типу (Частный / Государственный)
-            if (filters.types.length && !filters.types.includes(attr.type))
+            // 4. Фильтр по стоимости
+            if (filters.maxCost && uni.cost > filters.maxCost) {
                 return false;
-
-            // Фильтр по стоимости
-            if (attr.cost > filters.maxCost) return false;
+            }
 
             return true;
         });
-    }, [filters, universities]);
+    }, [filters, initialUniversities]);
 
     const visible = filtered.slice(0, visibleCount);
     const hasMore = visibleCount < filtered.length;
@@ -65,56 +62,23 @@ export default function CatalogLayout({ universities = [] }: { universities: any
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    const hasActiveFilters =
-        filters.countries.length > 0 ||
-        filters.types.length > 0 ||
-        !!filters.search ||
-        filters.maxCost < 100000;
-
     return (
-        <div className="max-w-7xl mx-auto py-10">
-            {/* Статистика поиска */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div className="mb-6">
-                <p className="text-sm text-gray-500">
-                    Найдено {filtered.length} университетов
+                <p className="text-sm font-medium text-gray-600">
+                    Найдено <span className="font-bold text-gray-900">{filtered.length}</span> университетов
                 </p>
             </div>
 
-            {/* Кнопка фильтров на мобилках */}
-            <div className="xl:hidden mb-4">
-                <button
-                    onClick={() => setMobileFilterOpen((v) => !v)}
-                    className="flex items-center gap-2 text-sm font-medium text-blue-600 border border-blue-200 bg-blue-50 px-4 py-2.5 rounded-lg hover:bg-blue-100 transition-colors"
-                >
-                    <SlidersHorizontal size={16} />
-                    {mobileFilterOpen ? "Скрыть фильтры" : "Показать фильтры"}
-                    {hasActiveFilters && (
-                        <span className="ml-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            !
-                        </span>
-                    )}
-                </button>
-            </div>
-
-            {/* Контентная сетка */}
             <div className="flex flex-col xl:flex-row gap-6 items-start">
-                {/* Сайдбар */}
-                <div
-                    className={`w-full xl:w-80 shrink-0 xl:sticky xl:top-24 ${
-                        mobileFilterOpen ? "block" : "hidden xl:block"
-                    }`}
-                >
+                <div className="w-full xl:w-80 shrink-0 xl:sticky xl:top-24">
                     <FilterSidebar
                         filters={filters}
-                        onChange={(f) => {
-                            setFilters(f);
-                            setVisibleCount(PAGE_SIZE);
-                        }}
+                        onChange={(f) => { setFilters(f); setVisibleCount(PAGE_SIZE); }}
                         onReset={handleReset}
                     />
                 </div>
 
-                {/* Сетка карточек — сюда передаем отфильтрованные реальные карточки */}
                 <UniversityGrid
                     universities={visible}
                     total={filtered.length}

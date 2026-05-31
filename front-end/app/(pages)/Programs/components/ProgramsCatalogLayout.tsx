@@ -6,7 +6,6 @@ import ProgramFilterSidebar, {
     type ProgramFilters,
 } from "./ProgramFilterSidebar";
 import ProgramsGrid from "./ProgramsGrid";
-import { mockPrograms } from "../data/ mockPrograms";
 
 const DEFAULT_FILTERS: ProgramFilters = {
     search: "",
@@ -16,28 +15,56 @@ const DEFAULT_FILTERS: ProgramFilters = {
 
 const PAGE_SIZE = 6;
 
-export default function ProgramsCatalogLayout() {
+export default function ProgramsCatalogLayout({ initialPrograms = [] }: { initialPrograms: any[] }) {
     const [filters, setFilters] = useState<ProgramFilters>(DEFAULT_FILTERS);
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
+    // 1. Нормализуем картинки: превращаем в объект { url }, если пришла строка, чтобы карточка не ругалась
+    const normalizedPrograms = useMemo(() => {
+        return initialPrograms.map((p) => {
+            if (typeof p.image === "string" && p.image.trim() !== "") {
+                return {
+                    ...p,
+                    image: {
+                        url: p.image,
+                    }
+                };
+            }
+            return {
+                ...p,
+                image: null
+            };
+        });
+    }, [initialPrograms]);
+
+    // 2. Единая фильтрация на основе нормализованного массива
     const filtered = useMemo(() => {
-        return mockPrograms.filter((p) => {
+        return normalizedPrograms.filter((p) => {
+            // Поиск по названию
             if (
                 filters.search &&
-                !p.title.toLowerCase().includes(filters.search.toLowerCase())
+                !p.name?.toLowerCase().includes(filters.search.toLowerCase())
             )
                 return false;
+
+            // Фильтр по направлениям (category)
             if (
                 filters.directions.length &&
-                !filters.directions.includes(p.direction)
+                !filters.directions.includes(p.category)
             )
                 return false;
-            if (filters.levels.length && !filters.levels.includes(p.level))
+
+            // Фильтр по уровням образования (degree)
+            if (
+                filters.levels.length &&
+                !filters.levels.includes(p.degree)
+            )
                 return false;
+
             return true;
         });
-    }, [filters]);
+    }, [filters, normalizedPrograms]);
 
     const visible = filtered.slice(0, visibleCount);
     const hasMore = visibleCount < filtered.length;
@@ -80,8 +107,8 @@ export default function ProgramsCatalogLayout() {
                     {mobileFilterOpen ? "Скрыть фильтры" : "Показать фильтры"}
                     {hasActiveFilters && (
                         <span className="ml-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              !
-            </span>
+                            !
+                        </span>
                     )}
                 </button>
             </div>

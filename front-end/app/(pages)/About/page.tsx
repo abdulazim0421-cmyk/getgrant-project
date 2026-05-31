@@ -8,20 +8,42 @@ import AboutHistory from "./components/AboutHistory";
 import AboutTeam from "./components/AboutTeam";
 import AboutLicenses from "./components/AboutLicenses";
 
-export default function AboutPage() {
-  return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main className="pt-[72px]">
-        <AboutHero />
-        <AboutStats />
-        <AboutMission />
-        <AboutValues />
-        <AboutHistory />
-        <AboutTeam />
-        <AboutLicenses />
-      </main>
-      <Footer />
-    </div>
-  );
+// Функция для получения данных из Strapi
+async function fetchAboutStats() {
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337";
+    try {
+        const res = await fetch(`${strapiUrl}/api/home-statistic?populate=*`, {
+            cache: "no-store", // Чтобы данные всегда были актуальными
+        });
+        if (!res.ok) return null;
+        const json = await res.json();
+        return json.data || null;
+    } catch (e) {
+        console.error("Ошибка при загрузке статистики Strapi:", e);
+        return null;
+    }
+}
+
+export default async function AboutPage() {
+    // Получаем данные перед рендерингом страницы
+    const statsData = await fetchAboutStats();
+
+    // Распаковываем поля (учитываем возможную структуру Strapi v4/v5)
+    const strapiStats = statsData?.attributes ? statsData.attributes : statsData;
+
+    return (
+        <div className="min-h-screen bg-white">
+            <Header />
+            <main className="pt-[72px]">
+                <AboutHero />
+                <AboutStats strapiStats={strapiStats} />
+                <AboutMission />
+                <AboutValues />
+                <AboutHistory />
+                <AboutTeam />
+                <AboutLicenses />
+            </main>
+            <Footer />
+        </div>
+    );
 }

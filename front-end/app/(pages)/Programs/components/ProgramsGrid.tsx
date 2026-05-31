@@ -1,6 +1,7 @@
-import type { Program } from "../data/ mockPrograms";
 import ProgramCard from "./ProgramCard";
+import type { Program } from "../data/mockPrograms";
 
+// Расширяем интерфейс всеми пропсами, которые реально используются в функции ниже
 interface ProgramsGridProps {
     programs: Program[];
     total: number;
@@ -42,7 +43,7 @@ export default function ProgramsGrid({
                     <div
                         className="bg-blue-600 h-1 rounded-full transition-all duration-500"
                         style={{
-                            width: `${Math.round((programs.length / total) * 100)}%`,
+                            width: `${Math.round((programs.length / (total || 1)) * 100)}%`,
                         }}
                     />
                 </div>
@@ -55,14 +56,15 @@ export default function ProgramsGrid({
                         <p className="text-xs text-gray-400">
                             Показано{" "}
                             <span className="font-semibold text-gray-600">
-                {programs.length}
-              </span>{" "}
+                                {programs.length}
+                            </span>{" "}
                             из{" "}
                             <span className="font-semibold text-gray-600">{total}</span>{" "}
                             программ
                         </p>
 
                         <div className="flex items-center gap-3">
+                            {/* Show more */}
                             {hasMore && (
                                 <button
                                     onClick={onShowMore}
@@ -71,6 +73,7 @@ export default function ProgramsGrid({
                                     Показать еще
                                 </button>
                             )}
+                            {/* Collapse */}
                             {canCollapse && (
                                 <button
                                     onClick={onCollapse}

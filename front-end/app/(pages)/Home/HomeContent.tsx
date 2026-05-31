@@ -1,13 +1,51 @@
-import PopularPrograms from "./HomeContent/PopularPrograms";
-import PopularCountries from "./HomeContent/PopularCountries";
-import PartnerUniversities from "./HomeContent/PartnerUniversities";
+"use client";
 
-export default function HomeContent() {
-  return (
-    <>
-      <PopularPrograms />
-      <PopularCountries />
-      <PartnerUniversities />
-    </>
-  );
+import React from "react";
+import dynamic from "next/dynamic";
+
+// ДИНАМИЧЕСКИЙ ИМПОРТ ПРОГРАММ (Обновлено)
+const PopularPrograms = dynamic(
+    () => import("./HomeContent/PopularPrograms").then((mod) => mod.PopularProgramsRaw),
+    {
+        ssr: false,
+        loading: () => <div className="py-12 text-center text-gray-400">Загрузка слайдера программ...</div>
+    }
+);
+
+// Динамический импорт слайдера стран
+const PopularCountries = dynamic(
+    () => import("./HomeContent/PopularCountries").then((mod) => mod.PopularCountriesRaw),
+    {
+        ssr: false,
+        loading: () => <div className="py-12 text-center text-gray-400">Загрузка слайдера стран...</div>
+    }
+);
+
+// Динамический импорт слайдера университетов
+const PartnerUniversities = dynamic(
+    () => import("./HomeContent/PartnerUniversities").then((mod) => mod.PartnerUniversitiesRaw),
+    {
+        ssr: false,
+        loading: () => <div className="py-12 text-center text-gray-400">Загрузка слайдера университетов...</div>
+    }
+);
+
+interface HomeContentProps {
+    countries: any[];
+    majors: any[];
+    partnerUniversities: any[];
+}
+
+export default function HomeContent({
+                                        countries,
+                                        majors,
+                                        partnerUniversities,
+                                    }: HomeContentProps) {
+    return (
+        <>
+            <PopularPrograms majors={majors} />
+            <PopularCountries countries={countries} />
+            <PartnerUniversities partnerUniversities={partnerUniversities} />
+        </>
+    );
 }

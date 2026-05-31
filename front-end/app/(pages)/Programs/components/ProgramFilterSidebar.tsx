@@ -2,15 +2,19 @@
 
 import { Search } from "lucide-react";
 
+// ВАЖНО: Эти значения должны СТРОГО совпадать с тем, как они записаны в базе Strapi!
+// Если в админке у тебя написано "IT", "Engineering", "Medicine" — замени строки ниже на них.
 const DIRECTIONS = [
     "Технологии",
     "Бизнес",
     "Медицина",
     "Инженерия",
     "Искусство",
+    "IT"
 ] as const;
 
-const LEVELS = ["Bachelor", "Master", "PhD", "Pre-Med"] as const;
+// Уровни образования. Если в Strapi они на русском (например, "Бакалавриат"), то измени их здесь.
+const LEVELS = ["Bachelor", "Master", "PhD", "Pre-Med", "Бакалавриат", "Магистратура"] as const;
 
 export interface ProgramFilters {
     search: string;
@@ -78,8 +82,8 @@ export default function ProgramFilterSidebar({
                                 className="w-4 h-4 rounded border-gray-300 accent-blue-600 cursor-pointer"
                             />
                             <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-                {dir}
-              </span>
+                                {dir}
+                            </span>
                         </label>
                     ))}
                 </div>
@@ -101,8 +105,8 @@ export default function ProgramFilterSidebar({
                                 className="w-4 h-4 rounded border-gray-300 accent-blue-600 cursor-pointer"
                             />
                             <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
-                {level}
-              </span>
+                                {level}
+                            </span>
                         </label>
                     ))}
                 </div>

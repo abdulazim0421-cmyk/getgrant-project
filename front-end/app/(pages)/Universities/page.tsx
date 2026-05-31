@@ -2,50 +2,63 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import CatalogLayout from "./components/CatalogLayout";
 
-// 1. Функция для получения данных из Strapi
 async function getUniversities() {
-    try {
-        // Делаем запрос к созданной вами коллекции.
-        // Обязательно добавляем ?populate=*, чтобы подтянулись картинки (поле image)
-        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+    const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-        const res = await fetch(`${strapiUrl}/api/universities-cards?populate=*`, {
+    try {
+        const res = await fetch(`${strapiUrl}/api/university-cards?populate=image`, {
             cache: "no-store",
         });
 
         if (!res.ok) {
-            throw new Error("Ошибка при получении данных из Strapi");
+            console.error(`[Strapi Error] Статус: ${res.status}`);
+            return [];
         }
 
         const json = await res.json();
-        return json.data; // Возвращаем массив карточек
+        const strapiData = json.data || [];
+
+        return strapiData.map((uni: any) => {
+            // Strapi v5 — данные прямо в объекте
+            const imageUrl = uni.image?.url
+                ? `${strapiUrl}${uni.image.url}`
+                : "";
+
+            const rawType = uni.type || "public";
+            const mappedType = rawType === "private" ? "Частный" : "Государственный";
+
+            return {
+                id: uni.id,
+                name: uni.title || "Без названия",
+                image: imageUrl,
+                programsCount: Number(uni.programsCount) || 0,
+                studentsCount: Number(uni.studentsCount) || 0,
+                location: {
+                    city: uni.city || "",
+                    state: uni.state || "",
+                    country: uni.country || "",
+                },
+                cost: Number(uni.cost) || 0,
+                acceptanceRate: Number(uni.acceptanceRate) || 0,
+                type: mappedType,
+            };
+        });
+
     } catch (error) {
-        console.error("Ошибка fetch:", error);
-        return []; // В случае ошибки возвращаем пустой массив, чтобы сайт не падал
+        console.error("[Strapi Fetch Error]:", error);
+        return [];
     }
 }
 
-// 2. Делаем компонент страницы асинхронным (async)
 export default async function UniversitiesPage() {
-    // Получаем данные карточек университетов
-    const universities = await getUniversities();
+    const universitiesData = await getUniversities();
 
     return (
         <div className="min-h-screen bg-white">
             <Header />
-
-            <main className="pt-24 pb-16">
-                <div className="container mx-auto px-6 lg:px-12">
-                    {/* Заголовок страницы */}
-                    <h1 className="text-4xl font-bold text-[#101828] mb-8">Университеты</h1>
-
-                    {/* Передаем полученные из Strapi данные в ваш компонент макета каталога.
-            Внутри CatalogLayout вы сможете их отрендерить в сетку.
-          */}
-                    <CatalogLayout universities={universities} />
-                </div>
+            <main className="pt-20">
+                <CatalogLayout initialUniversities={universitiesData} />
             </main>
-
             <Footer />
         </div>
     );

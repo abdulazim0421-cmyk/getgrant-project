@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Clock, TrendingUp, Crown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,185 +10,143 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import SectionHeader from "@/app/components/SectionHeader";
 
-// ─── Типы ────────────────────────────────────────────────────────────────────
-
-interface Program {
-  id: number;
-  tags: string[];
-  title: string;
-  duration: string;
-  salary: string;
-  image: string;
-  href: string;
+interface PopularProgramsProps {
+    majors: any[];
 }
 
-// ─── Данные ──────────────────────────────────────────────────────────────────
+function ProgramCard({ program }: { program: any }) {
+    if (!program) return null;
 
-const programs: Program[] = [
-  {
-    id: 1,
-    title: "Computer Science",
-    tags: ["Software Engineer", "Data Scientist"],
-    image: "/image/HomeContent/PopularPrograms/Rectangle 1.png",
-    duration: "4 года", salary: "$85,000",
-    href: "https://ru.wikipedia.org/wiki/Информатика",
-  },
-  {
-    id: 2,
-    title: "Web Developer",
-    tags: ["Product Manager", "UX Designer"],
-    image: "/image/HomeContent/PopularPrograms/Rectangle 1 (5).png",
-    duration: "3 года", salary: "$90,000",
-    href: "https://ru.wikipedia.org/wiki/Веб-разработка",
-  },
-  {
-    id: 3,
-    title: "System Administrator",
-    tags: ["DevOps Engineer", "Business Analyst"],
-    image: "/image/HomeContent/PopularPrograms/Rectangle 1 (6).png",
-    duration: "5 лет", salary: "$95,000",
-    href: "https://ru.wikipedia.org/wiki/Системный_администратор",
-  },
-  {
-    id: 4,
-    title: "Mobile Developer",
-    tags: ["Frontend Developer", "Data Analyst"],
-    image: "/image/HomeContent/PopularPrograms/Frame 53 (2).png",
-    duration: "2 года", salary: "$75,000",
-    href: "https://ru.wikipedia.org/wiki/Мобильная_разработка",
-  },
-  {
-    id: 5,
-    title: "Backend Developer",
-    tags: ["Backend Architecture", "API Design"],
-    image: "/image/HomeContent/PopularPrograms/Backend.jpg",
-    duration: "4 года", salary: "$80,000",
-    href: "https://ru.wikipedia.org/wiki/Бэкенд",
-  },
-  {
-    id: 6,
-    title: "Game Developer",
-    tags: ["Game Design", "C++"],
-    image: "/image/HomeContent/PopularPrograms/Robotics Engineer.webp",
-    duration: "4 года", salary: "$90,000",
-    href: "https://ru.wikipedia.org/wiki/Разработка_компьютерных_игр",
-  },
-  {
-    id: 7,
-    title: "Cybersecurity",
-    tags: ["Network Security", "Ethical Hacking"],
-    image: "/image/HomeContent/PopularPrograms/Cybersecurity.webp",
-    duration: "4 года", salary: "$95,000",
-    href: "https://ru.wikipedia.org/wiki/Информационная_безопасность",
-  },
-  {
-    id: 8,
-    title: "Artificial Intelligence",
-    tags: ["Python", "Neural Networks"],
-    image: "/image/HomeContent/PopularPrograms/AI.jpg",
-    duration: "4 года", salary: "$105,000",
-    href: "https://ru.wikipedia.org/wiki/Искусственный_интеллект",
-  },
-  {
-    id: 9,
-    title: "Data Engineer",
-    tags: ["Big Data", "ETL Developer"],
-    image: "/image/HomeContent/PopularPrograms/Data Engineer.png",
-    duration: "3 года", salary: "$100,000",
-    href: "https://ru.wikipedia.org/wiki/Инженерия_данных",
-  },
-  {
-    id: 10,
-    title: "Cloud Architect",
-    tags: ["AWS", "Cloud Infrastructure"],
-    image: "/image/HomeContent/PopularPrograms/Cloud Architect.webp",
-    duration: "5 лет", salary: "$110,000",
-    href: "https://ru.wikipedia.org/wiki/Облачные_вычисления",
-  },
-];
+    // Поддержка Strapi v5 — данные лежат на верхнем уровне объекта
+    const attr = program.attributes ? program.attributes : program;
+    if (!attr) return null;
 
-// ─── Карточка ─────────────────────────────────────────────────────────────────
+    const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337";
 
-function ProgramCard({ program }: { program: Program }) {
-  return (
-    <Link
-      href={program.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col w-[300px] p-[10px] pb-[20px] gap-[10px] rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-    >
-      {/* Изображение */}
-      <div className="relative w-full h-[160px] rounded-xl overflow-hidden bg-slate-200">
-        {program.image ? (
-          <Image src={program.image} alt={program.title} fill className="object-cover scale-100 transition-transform duration-500 ease-out group-hover:scale-110" sizes="300px" />
-        ) : (
-          <div className="w-full h-full bg-slate-200" />
-        )}
-        {/* Бейдж с короной */}
-        <div className="absolute top-3 left-3 w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center z-10">
-          <Crown size={18} stroke="white" strokeWidth={2} />
-        </div>
-      </div>
+    // ИСПРАВЛЕНО: Прямое безопасное чтение url для Strapi v5
+    const imageUrl = attr.image?.url
+        ? `${STRAPI_URL}${attr.image.url}`
+        : null;
 
-      {/* Теги */}
-      <div className="flex flex-wrap gap-1">
-        {program.tags.map((tag) => (
-          <span key={tag} className="text-[10px] font-medium text-blue-600 border border-slate-200 bg-transparent px-2 py-0.5 rounded-full">
-            {tag}
-          </span>
-        ))}
-      </div>
+    // Превращаем строку тегов "Software Engineer, Data Scientist" в массив
+    const tagsArray = attr.tags
+        ? attr.tags.split(",").map((t: string) => t.trim()).filter(Boolean)
+        : [];
 
-      {/* Название */}
-      <p className="text-sm font-bold text-gray-900 leading-tight">{program.title}</p>
+    return (
+        <Link
+            href={attr.href || "#/"}
+            target={attr.href ? "_blank" : "_self"}
+            rel="noopener noreferrer"
+            className="group flex flex-col w-[300px] p-[10px] pb-[20px] gap-[10px] rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+        >
+            {/* Изображение */}
+            <div className="relative w-full h-[160px] rounded-xl overflow-hidden bg-slate-200">
+                {imageUrl ? (
+                    <Image
+                        src={imageUrl}
+                        alt={attr.title || "Program image"}
+                        fill
+                        className="object-cover scale-100 transition-transform duration-500 ease-out group-hover:scale-110"
+                        sizes="300px"
+                        unoptimized
+                    />
+                ) : (
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center text-gray-400 text-xs">
+                        Нет изображения
+                    </div>
+                )}
 
-      {/* Срок и зарплата */}
-      <div className="flex items-center gap-3 text-xs">
-        <span className="flex items-center gap-1 text-slate-900">
-          <Clock size={12} className="text-blue-600" />
-          {program.duration}
-        </span>
-        <span className="flex items-center gap-1 font-bold text-slate-900">
-          <TrendingUp size={12} className="text-blue-600" />
-          {program.salary}
-        </span>
-      </div>
-    </Link>
-  );
+                {/* Бейдж с короной */}
+                {attr.isPremium && (
+                    <div className="absolute top-3 left-3 w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center z-10">
+                        <Crown size={18} stroke="white" strokeWidth={2} />
+                    </div>
+                )}
+            </div>
+
+            {/* Теги */}
+            {tagsArray.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                    {tagsArray.map((tag: string) => (
+                        <span key={tag} className="text-[10px] font-medium text-blue-600 border border-slate-200 bg-transparent px-2 py-0.5 rounded-full">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+            )}
+
+            {/* Название */}
+            <p className="text-sm font-bold text-gray-900 leading-tight min-h-[40px] line-clamp-2">
+                {attr.title || "Название программы"}
+            </p>
+
+            {/* Срок и зарплата */}
+            <div className="flex items-center gap-3 text-xs mt-auto">
+                <span className="flex items-center gap-1 text-slate-900">
+                    <Clock size={12} className="text-blue-600" />
+                    {attr.duration || "Не указан"}
+                </span>
+                <span className="flex items-center gap-1 font-bold text-slate-900">
+                    <TrendingUp size={12} className="text-blue-600" />
+                    {attr.salary || "—"}
+                </span>
+            </div>
+        </Link>
+    );
 }
 
-// ─── Секция ───────────────────────────────────────────────────────────────────
+// Экспортируем как именованную функцию для подключения через dynamic без SSR
+export function PopularProgramsRaw({ majors = [] }: PopularProgramsProps) {
+    const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
 
-export default function PopularPrograms() {
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
-  return (
-    <section className="py-12">
-      <div className="container mx-auto px-6 lg:px-12">
-        <SectionHeader
-          title="Популярные программы"
-          subtitle="Выбирайте из топовых образовательных программ мира"
-          onPrev={() => swiperInstance?.slidePrev()}
-          onNext={() => swiperInstance?.slideNext()}
-        />
-      </div>
+    if (!majors || majors.length === 0) {
+        return <div className="py-12 text-center text-gray-400">Загрузка программ...</div>;
+    }
 
-      <Swiper
-        modules={[Navigation, Mousewheel]}
-        onSwiper={setSwiperInstance}
-        loop={true}
-        mousewheel={{ forceToAxis: true, sensitivity: 1 }}
-        slidesPerView="auto"
-        spaceBetween={20}
-        grabCursor={true}
-        className="!px-6 lg:!px-12 !pb-4"
-      >
-        {programs.map((p) => (
-          <SwiperSlide key={p.id} style={{ width: "auto" }}>
-            <ProgramCard program={p} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </section>
-  );
+    return (
+        <section className="py-12">
+            <div className="container mx-auto px-6 lg:px-12">
+                <SectionHeader
+                    title="Популярные программы"
+                    subtitle="Выбирайте из топовых образовательных программ мира"
+                    onPrev={() => swiperInstance?.slidePrev()}
+                    onNext={() => swiperInstance?.slideNext()}
+                />
+            </div>
+
+            {isMounted ? (
+                <Swiper
+                    modules={[Navigation, Mousewheel]}
+                    onSwiper={setSwiperInstance}
+                    loop={majors.length > 3}
+                    mousewheel={{ forceToAxis: true, sensitivity: 1 }}
+                    slidesPerView="auto"
+                    spaceBetween={20}
+                    grabCursor={true}
+                    className="!px-6 lg:!px-12 !pb-4"
+                >
+                    {majors.map((p) => (
+                        <SwiperSlide key={p.id} style={{ width: "auto" }}>
+                            <ProgramCard program={p} />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            ) : (
+                // Заглушка для серверного рендеринга
+                <div className="flex gap-5 overflow-hidden px-6 lg:px-12 !pb-4">
+                    {majors.slice(0, 4).map((p) => (
+                        <div key={p.id} style={{ width: "auto" }}>
+                            <ProgramCard program={p} />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </section>
+    );
 }
