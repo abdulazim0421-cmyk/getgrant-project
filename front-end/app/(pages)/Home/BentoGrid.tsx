@@ -1,65 +1,70 @@
-import React from 'react';
+"use client";
 
-const BENEFITS = [
-    {
-        id: 1,
-        title: "95% успеха",
-        description: "Наши студенты успешно поступают в топовые университеты мира",
-        className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#A16FD3] to-[#583177] text-white",
-        image: "/image/student-grid1.png",
-        imgClass: "right-[-5%] bottom-[-5%] w-[60%] sm:w-[40%] md:w-[60%] h-auto",
-    },
-    {
-        id: 2,
-        title: "Персональный менеджер",
-        description: "Индивидуальное сопровождение на всех этапах подготовки и поступления",
-        className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#F5F8FE] to-[#D0EFE9] text-slate-900",
-        image: "/image/student-grid2.png",
-        imgClass: "right-0 bottom-0 w-[60%] sm:w-[40%] md:w-[65%] h-auto",
-    },
-    {
-        id: 3,
-        title: "Лицензированный центр",
-        description: "Наши студенты успешно поступают в топовые университеты мира",
-        className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
-        image: "/image/student-grid5.png",
-        imgClass: "right-4 top-1/2 -translate-y-1/2 w-[35%] sm:w-[20%] md:w-[50%] h-auto",
-    },
-    {
-        id: 4,
-        title: "Поддержка 24/7",
-        description: "Всегда на связи для ответов на ваши вопросы",
-        className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-gradient-to-b from-[#FEF9E8] to-[#FDE1A7] text-slate-900",
-        image: "/image/student-grid3.png",
-        imgClass: "right-0 bottom-0 w-[85%] sm:w-[65%] md:w-[95%] h-auto",
-    },
-    {
-        id: 5,
-        title: "15+ стран",
-        description: "Партнёрство с университетами мира",
-        className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-[#EAECF0] text-slate-900",
-        image: "/image/student-grid4.png",
-        imgClass: "right-0 bottom-0 w-full h-auto opacity-80",
-    },
-    {
-        id: 6,
-        title: "Онлайн-подготовка",
-        description: "Курсы по языку, предметам и экзаменам",
-        className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
-        image: "/image/student-grid6.png",
-        imgClass: "right-4 bottom-0 w-[35%] sm:w-[25%] md:w-[38%] h-auto",
-    },
-];
+import React from "react";
+import { useLanguage } from "@/app/context/LanguageContext";
 
-const WhyGetGrant = () => {
+export default function WhyGetGrant() {
+    const { t } = useLanguage();
+
+    const BENEFITS = [
+        {
+            id: 1,
+            title: t("bento.1.title"),
+            description: t("bento.1.desc"),
+            className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#A16FD3] to-[#583177] text-white",
+            image: "/image/student-grid1.png",
+            imgClass: "right-[-5%] bottom-[-5%] w-[60%] sm:w-[40%] md:w-[60%] h-auto",
+        },
+        {
+            id: 2,
+            title: t("bento.2.title"),
+            description: t("bento.2.desc"),
+            className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#F5F8FE] to-[#D0EFE9] text-slate-900",
+            image: "/image/student-grid2.png",
+            imgClass: "right-0 bottom-0 w-[60%] sm:w-[40%] md:w-[65%] h-auto",
+        },
+        {
+            id: 3,
+            title: t("bento.3.title"),
+            description: t("bento.3.desc"),
+            className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
+            image: "/image/student-grid5.png",
+            imgClass: "right-4 top-1/2 -translate-y-1/2 w-[35%] sm:w-[20%] md:w-[50%] h-auto",
+        },
+        {
+            id: 4,
+            title: t("bento.4.title"),
+            description: t("bento.4.desc"),
+            className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-gradient-to-b from-[#FEF9E8] to-[#FDE1A7] text-slate-900",
+            image: "/image/student-grid3.png",
+            imgClass: "right-0 bottom-0 w-[85%] sm:w-[65%] md:w-[95%] h-auto",
+        },
+        {
+            id: 5,
+            title: t("bento.5.title"),
+            description: t("bento.5.desc"),
+            className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-[#EAECF0] text-slate-900",
+            image: "/image/student-grid4.png",
+            imgClass: "right-0 bottom-0 w-full h-auto opacity-80",
+        },
+        {
+            id: 6,
+            title: t("bento.6.title"),
+            description: t("bento.6.desc"),
+            className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
+            image: "/image/student-grid6.png",
+            imgClass: "right-4 bottom-0 w-[35%] sm:w-[25%] md:w-[38%] h-auto",
+        },
+    ];
+
     return (
         <section className="max-w-[1280px] mx-auto px-4 py-12 md:py-20 font-sans antialiased">
             <div className="flex flex-col items-center text-center mb-10 md:mb-14 px-4">
                 <h2 className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold mb-3 text-[#1D2939] tracking-tight leading-[1.2]">
-                    Почему GetGrant?
+                    {t("bento.title")}
                 </h2>
                 <p className="text-[#667085] text-[15px] sm:text-[16px] md:text-[17px] max-w-[640px] mx-auto font-medium leading-relaxed opacity-90">
-                    Мы предоставляем комплексную поддержку для успешного поступления в зарубежные университеты
+                    {t("bento.desc")}
                 </p>
             </div>
 
@@ -67,8 +72,7 @@ const WhyGetGrant = () => {
                 {BENEFITS.map((item) => (
                     <div
                         key={item.id}
-                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-6 md:p-7 flex flex-col cursor-default
-                        transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
+                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-6 md:p-7 flex flex-col cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
                     >
                         <div className="relative z-10 max-w-[200px] sm:max-w-[240px] md:max-w-[260px]">
                             <h3 className="text-[19px] sm:text-[22px] md:text-[25px] font-bold mb-2 md:mb-2 leading-[1.1] tracking-tight">
@@ -101,6 +105,4 @@ const WhyGetGrant = () => {
             </div>
         </section>
     );
-};
-
-export default WhyGetGrant;
+}

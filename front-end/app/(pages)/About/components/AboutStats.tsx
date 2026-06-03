@@ -2,38 +2,20 @@
 
 import { GraduationCap, TrendingUp, Globe, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 interface AboutStatsProps {
-    strapiStats: {
-        studentsCount?: string;
-        universitiesCount?: string;
-        countriesCount?: string;
-        successRate?: string;
-    } | null;
+    strapiStats: { studentsCount?: string; universitiesCount?: string; countriesCount?: string; successRate?: string; } | null;
 }
 
 export default function AboutStats({ strapiStats }: AboutStatsProps) {
+    const { t } = useLanguage();
+
     const stats = [
-        {
-            icon: <GraduationCap size={20} className="text-white" />,
-            value: strapiStats?.studentsCount || "500+",
-            label: "Поступивших студентов"
-        },
-        {
-            icon: <Building2 size={20} className="text-white" />, // Заменил на иконку здания для ВУЗов
-            value: strapiStats?.universitiesCount || "50+",
-            label: "Университетов-партнёров"
-        },
-        {
-            icon: <Globe size={20} className="text-white" />, // Заменил на иконку глобуса для стран
-            value: strapiStats?.countriesCount || "15+",
-            label: "Стран для обучения"
-        },
-        {
-            icon: <TrendingUp size={20} className="text-white" />,
-            value: strapiStats?.successRate || "95%",
-            label: "Уровень успеха"
-        },
+        { icon: <GraduationCap size={20} className="text-white" />, value: strapiStats?.studentsCount    || "500+", label: t("about.stats.students")     },
+        { icon: <Building2     size={20} className="text-white" />, value: strapiStats?.universitiesCount || "50+",  label: t("about.stats.universities") },
+        { icon: <Globe         size={20} className="text-white" />, value: strapiStats?.countriesCount    || "15+",  label: t("about.stats.countries")    },
+        { icon: <TrendingUp    size={20} className="text-white" />, value: strapiStats?.successRate       || "95%",  label: t("about.stats.success")      },
     ];
 
     return (
@@ -41,14 +23,7 @@ export default function AboutStats({ strapiStats }: AboutStatsProps) {
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
                     {stats.map((s, i) => (
-                        <motion.div
-                            key={i}
-                            className="flex flex-col items-center text-center gap-3"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: i * 0.1 }}
-                        >
+                        <motion.div key={i} className="flex flex-col items-center text-center gap-3" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}>
                             <div className="bg-white/10 p-3 rounded-lg">{s.icon}</div>
                             <p className="text-3xl font-bold text-white">{s.value}</p>
                             <p className="text-sm text-slate-400">{s.label}</p>
