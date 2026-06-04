@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type Lang = "ru" | "ky";
 
@@ -189,6 +189,15 @@ const translations: Record<Lang, Record<string, string>> = {
         "programs.grid.showmore": "Показать еще",
         "programs.grid.collapse": "Свернуть",
         "programs.grid.notfound": "Программы не найдены. Попробуйте изменить фильтры.",
+        averageSalary: "Средняя зарплата",
+        careerPaths: "Карьерные пути:",
+        noImage: "Нет изображения программы",
+        year1: "год",
+        year2: "года",
+        year5: "лет",
+        vuz1: "ВУЗ",
+        vuz2: "ВУЗа",
+        vuz5: "ВУЗов"
     },
 
     ky: {
@@ -367,11 +376,35 @@ const translations: Record<Lang, Record<string, string>> = {
         "programs.grid.showmore": "Дагы көрсөтүү",
         "programs.grid.collapse": "Жыйыштыруу",
         "programs.grid.notfound": "Программалар табылган жок. Фильтрлерди өзгөртүп көрүңүз.",
+            averageSalary: "Орточо айлык акы",
+            careerPaths: "Карьералык жолдор:",
+            noImage: "Программанын сүрөтү жок",
+            year1: "жыл",
+            year2: "жыл",
+            year5: "жыл",
+            vuz1: "ЖОГ",
+            vuz2: "ЖОГ",
+            vuz5: "ЖОГ"
     },
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [lang, setLang] = useState<Lang>("ru");
+    const [lang, setLangState] = useState<Lang>("ru");
+    const [mounted, setMounted] = useState(false);
+
+    // Читаем язык из localStorage при загрузке
+    useEffect(() => {
+        const saved = localStorage.getItem("lang") as Lang | null;
+        if (saved === "ru" || saved === "ky") {
+            setLangState(saved);
+        }
+        setMounted(true);
+    }, []);
+
+    const setLang = (newLang: Lang) => {
+        setLangState(newLang);
+        localStorage.setItem("lang", newLang);
+    };
 
     const t = (key: string): string => {
         return translations[lang][key] ?? translations["ru"][key] ?? key;

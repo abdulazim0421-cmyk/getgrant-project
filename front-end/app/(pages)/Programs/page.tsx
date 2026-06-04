@@ -1,21 +1,24 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import ProgramsCatalogLayout from "./components/ProgramsCatalogLayout";
+import { useLanguage } from "@/app/context/LanguageContext";
 
-// ─── 1. ФУНКЦИЯ ЗАПРОСА К STRAPI ─────────────────────────────────────────────
-async function getPrograms() {
+// Функция запроса теперь принимает параметр языка (locale)
+async function fetchProgramsFromStrapi(locale: string) {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
     try {
-        // Запрашиваем связь 'image' через правильный синтаксис Strapi v4/v5
         const queryParams = new URLSearchParams({
             "populate": "image",
-            "timestamp": Date.now().toString() // Убивает любой жесткий кэш Next.js
+            "locale": locale, // Передаем 'ru' или 'ky' в Strapi
+            "timestamp": Date.now().toString()
         });
 
         const res = await fetch(`${strapiUrl}/api/programs-cards?${queryParams.toString()}`, {
-            cache: "no-store",
-            next: { revalidate: 0 }
+            cache: "no-store"
         });
 
         if (!res.ok) {
@@ -28,10 +31,8 @@ async function getPrograms() {
 
         return strapiData.map((prog: any) => {
             const item = prog.attributes ? prog.attributes : prog;
-
             let imgUrl = null;
 
-            // Извлекаем URL картинки с учетом структуры v4 и v5
             if (item.image) {
                 if (item.image.data) {
                     const data = item.image.data;
@@ -50,27 +51,54 @@ async function getPrograms() {
                 duration: Number(item.DURATION) || Number(item.duration) || 0,
                 universitiesCount: Number(item.universitiesCount) || 12,
                 averageSalary: Number(item.averageSalary) || 75000,
-                careerPaths: Array.isArray(item.careerPaths) ? item.careerPaths : ["Разработчик", "Аналитик", "Тестировщик"],
+                // Если карьерные пути возвращаются строкой, делим её, если массивом — оставляем
+                careerPaths: Array.isArray(item.careerPaths)
+                    ? item.careerPaths
+                    : item.careerPaths ? [item.careerPaths] : ["Разработчик", "Аналитик"],
                 category: item.category || "IT",
                 degree: item.degree || "Bachelor"
             };
         });
 
     } catch (error) {
-        console.error("[Strapi Fetch Error] Не удалось связаться со Strapi для программ:", error);
+        console.error("[Strapi Fetch Error] Ошибка запроса программ:", error);
         return [];
     }
 }
 
-// ─── 2. СЛУЖЕБНЫЙ КОМПОНЕНТ СТРАНИЦЫ (ОБЯЗАТЕЛЬНО EXPORT DEFAULT) ──────────────
-export default async function ProgramsPage() {
-    const programsData = await getPrograms();
+export default function ProgramsPage() {
+    const { lang } = useLanguage(); // Следим за текущим языком (ru / ky)
+    const [programs, setPrograms] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    // Каждый раз, когда пользователь меняет язык в Header, этот useEffect делает новый запрос в Strapi
+    useEffect(() => {
+        let isMounted = true;
+        setLoading(true);
+
+        fetchProgramsFromStrapi(lang).then((data) => {
+            if (isMounted) {
+                setPrograms(data);
+                setLoading(false);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [lang]);
 
     return (
         <div className="min-h-screen bg-white">
             <Header />
             <main className="pt-20">
-                <ProgramsCatalogLayout initialPrograms={programsData} />
+                {loading ? (
+                    <div className="flex items-center justify-center min-h-[400px]">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    </div>
+                ) : (
+                    <ProgramsCatalogLayout initialPrograms={programs} />
+                )}
             </main>
             <Footer />
         </div>

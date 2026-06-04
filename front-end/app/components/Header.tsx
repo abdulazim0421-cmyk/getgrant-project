@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, GraduationCap, Globe, BookOpen, Clock, Users, LogIn } from "lucide-react";
+import { Menu, X, GraduationCap, Globe, BookOpen, Clock, Users, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import ConsultationModal from "./ConsultationModal";
@@ -13,8 +13,11 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
     const pathname = usePathname();
     const { lang, setLang, t } = useLanguage();
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -31,6 +34,17 @@ export default function Header() {
     useEffect(() => {
         document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
     }, [isMobileMenuOpen]);
+
+    // Закрытие выпадашки при клике вне её области
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsLangDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const navLinks = [
         { href: "/Universities", label: t("nav.universities"), icon: <GraduationCap size={18} /> },
@@ -79,22 +93,43 @@ export default function Header() {
                 </nav>
 
                 <div className="flex items-center gap-2 md:gap-3">
-                    {/* Кнопка переключения языка */}
-                    <button
-                        onClick={() => setLang(lang === "ru" ? "ky" : "ru")}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all"
-                    >
-                        <Globe size={15} />
-                        {lang === "ru" ? "КЫР" : "РУС"}
-                    </button>
 
-                    <Link
-                        href="/login"
+                    {/* ВЫПАДАШКА ВЫБОРА ЯЗЫКА (ДЕСКТОП) */}
+                    <div className="relative hidden md:block" ref={dropdownRef}>
+                        <button
+                            onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all bg-white uppercase"
+                        >
+                            <Globe size={15} />
+                            <span>{lang === "ru" ? "RU" : "KG"}</span>
+                            <ChevronDown size={14} className={`transition-transform duration-200 ${isLangDropdownOpen ? "rotate-180" : ""}`} />
+                        </button>
+
+                        {isLangDropdownOpen && (
+                            <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                                <button
+                                    onClick={() => { setLang("ru"); setIsLangDropdownOpen(false); }}
+                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                >
+                                    RU
+                                </button>
+                                <button
+                                    onClick={() => { setLang("ky"); setIsLangDropdownOpen(false); }}
+                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                >
+                                    KG
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <button
+                        onClick={() => {}}
                         className="hidden md:flex items-center gap-2 text-gray-600 font-medium hover:text-blue-600 px-4 py-3 transition-colors group/login"
                     >
                         <LogIn size={20} className="group-hover/login:-translate-x-1 transition-transform" />
                         <span className="text-sm lg:text-base">{t("nav.login")}</span>
-                    </Link>
+                    </button>
 
                     <Button
                         onClick={() => setIsModalOpen(true)}
@@ -123,9 +158,9 @@ export default function Header() {
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
                     <div className="flex justify-between items-center mb-10">
-            <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">
-              {lang === "ru" ? "Меню" : "Меню"}
-            </span>
+                        <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">
+                            {lang === "ru" ? "Меню" : "Меню"}
+                        </span>
                         <button
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="p-2 bg-gray-100 rounded-full hover:bg-red-50 hover:text-red-500 transition-colors"
@@ -134,14 +169,21 @@ export default function Header() {
                         </button>
                     </div>
 
-                    {/* Переключатель языка в мобильном меню */}
-                    <button
-                        onClick={() => setLang(lang === "ru" ? "ky" : "ru")}
-                        className="flex items-center gap-2 px-4 py-3 mb-4 rounded-xl border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all w-full"
-                    >
-                        <Globe size={16} />
-                        {lang === "ru" ? "Кыргызча" : "Русча"}
-                    </button>
+                    {/* ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА (МОБИЛЬНЫЙ) */}
+                    <div className="grid grid-cols-2 gap-2 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-8">
+                        <button
+                            onClick={() => setLang("ru")}
+                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${lang === "ru" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                        >
+                            RU
+                        </button>
+                        <button
+                            onClick={() => setLang("ky")}
+                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${lang === "ky" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                        >
+                            KG
+                        </button>
+                    </div>
 
                     <nav className="flex flex-col gap-4 flex-grow overflow-y-auto">
                         {navLinks.map((link, idx) => (
@@ -156,28 +198,29 @@ export default function Header() {
                                 }`}
                                 style={{ transitionDelay: `${idx * 50}ms` }}
                             >
-                <span className={pathname.startsWith(link.href) ? "text-blue-600" : "text-gray-400"}>
-                  {link.icon}
-                </span>
+                                <span className={pathname.startsWith(link.href) ? "text-blue-600" : "text-gray-400"}>
+                                    {link.icon}
+                                </span>
                                 {link.label}
                             </Link>
                         ))}
                     </nav>
 
                     <div className="mt-auto pt-6 border-t border-gray-100 space-y-3 block md:hidden">
-                        <Button
-                            onClick={() => { setIsMobileMenuOpen(false); setIsModalOpen(true); }}
-                            className="w-full bg-blue-600 py-7 text-white text-lg font-medium rounded-2xl shadow-lg shadow-blue-600/20"
+                        <button
+                            onClick={() => { setLang("ru"); setIsLangDropdownOpen(false); }}
+                            className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                         >
-                            {t("nav.consultation")}
-                        </Button>
-                        <Link
-                            href="/login"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex items-center justify-center gap-2 w-full py-4 font-medium text-gray-600 bg-gray-50 rounded-2xl border border-gray-100"
+                            RU
+                        </button>
+
+                        {/* Кнопка KG */}
+                        <button
+                            onClick={() => { setLang("ky"); setIsLangDropdownOpen(false); }}
+                            className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                         >
-                            <LogIn size={20} /> {t("nav.login")}
-                        </Link>
+                            KG
+                        </button>
                     </div>
                 </div>
             </div>

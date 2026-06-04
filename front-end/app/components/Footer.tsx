@@ -148,7 +148,7 @@ export default function Footer() {
                     </p>
 
                     <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
-                        <Link href="/privacy" className="hover:text-white transition-colors">Политика конфиденциальности</Link>
+                        <Link href="/front-end/app/(pages)/privacy" className="hover:text-white transition-colors">Политика конфиденциальности</Link>
                         <Link href="/terms" className="hover:text-white transition-colors">Условия использования</Link>
                         <Link href="/license" className="hover:text-white transition-colors">Лицензии</Link>
                     </div>
