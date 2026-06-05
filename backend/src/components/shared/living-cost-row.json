@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_living_cost_rows",
+  "info": {
+    "displayName": "living_cost_row",
+    "icon": "server"
+  },
+  "options": {},
+  "attributes": {
+    "category": {
+      "type": "string"
+    },
+    "min": {
+      "type": "integer"
+    },
+    "average": {
+      "type": "integer"
+    },
+    "max": {
+      "type": "integer"
+    }
+  },
+  "config": {}
+}

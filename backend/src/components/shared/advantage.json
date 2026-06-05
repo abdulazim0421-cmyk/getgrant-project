@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_shared_advantages",
+  "info": {
+    "displayName": "Advantage",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

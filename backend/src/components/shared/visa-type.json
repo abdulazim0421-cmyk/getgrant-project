@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_visa_types",
+  "info": {
+    "displayName": "visa_type",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

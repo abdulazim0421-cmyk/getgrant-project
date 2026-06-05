@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_shared_universities",
+  "info": {
+    "displayName": "university",
+    "icon": "house"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "programs": {
+      "type": "integer"
+    },
+    "salary": {
+      "type": "integer"
+    },
+    "location": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
