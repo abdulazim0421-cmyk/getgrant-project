@@ -13,7 +13,7 @@ export default function WhyGetGrant() {
             description: t("bento.1.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#A16FD3] to-[#583177] text-white",
             image: "/image/student-grid1.png",
-            imgClass: "right-[-5%] bottom-[-5%] w-[60%] sm:w-[40%] md:w-[60%] h-auto",
+            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[60%] sm:w-[50%] md:w-[60%] h-auto md:absolute",
         },
         {
             id: 2,
@@ -21,7 +21,7 @@ export default function WhyGetGrant() {
             description: t("bento.2.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#F5F8FE] to-[#D0EFE9] text-slate-900",
             image: "/image/student-grid2.png",
-            imgClass: "right-0 bottom-0 w-[60%] sm:w-[40%] md:w-[65%] h-auto",
+            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[60%] sm:w-[50%] md:w-[65%] h-auto md:absolute",
         },
         {
             id: 3,
@@ -29,7 +29,7 @@ export default function WhyGetGrant() {
             description: t("bento.3.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
             image: "/image/student-grid5.png",
-            imgClass: "right-4 top-1/2 -translate-y-1/2 w-[35%] sm:w-[20%] md:w-[50%] h-auto",
+            imgClass: "right-0 md:right-4 bottom-0 md:top-1/2 md:-translate-y-1/2 max-md:relative max-md:mt-4 max-md:mx-auto w-[45%] sm:w-[30%] md:w-[50%] h-auto md:absolute",
         },
         {
             id: 4,
@@ -37,7 +37,7 @@ export default function WhyGetGrant() {
             description: t("bento.4.desc"),
             className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-gradient-to-b from-[#FEF9E8] to-[#FDE1A7] text-slate-900",
             image: "/image/student-grid3.png",
-            imgClass: "right-0 bottom-0 w-[85%] sm:w-[65%] md:w-[95%] h-auto",
+            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[70%] sm:w-[65%] md:w-[95%] h-auto md:absolute",
         },
         {
             id: 5,
@@ -45,7 +45,7 @@ export default function WhyGetGrant() {
             description: t("bento.5.desc"),
             className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-[#EAECF0] text-slate-900",
             image: "/image/student-grid4.png",
-            imgClass: "right-0 bottom-0 w-full h-auto opacity-80",
+            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[80%] sm:w-full h-auto opacity-80 md:absolute",
         },
         {
             id: 6,
@@ -53,7 +53,7 @@ export default function WhyGetGrant() {
             description: t("bento.6.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
             image: "/image/student-grid6.png",
-            imgClass: "right-4 bottom-0 w-[35%] sm:w-[25%] md:w-[38%] h-auto",
+            imgClass: "right-0 md:right-4 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[45%] sm:w-[35%] md:w-[38%] h-auto md:absolute",
         },
     ];
 
@@ -68,13 +68,15 @@ export default function WhyGetGrant() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-4 lg:gap-5 auto-rows-[minmax(160px,auto)] md:auto-rows-[170px]">
+            {/* Изменено: на мобилках auto-rows отключается во избежание сжатия текста */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-4 lg:gap-5 auto-rows-auto md:auto-rows-[170px]">
                 {BENEFITS.map((item) => (
                     <div
                         key={item.id}
-                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-6 md:p-7 flex flex-col cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
+                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-6 md:p-7 flex flex-col justify-between cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
                     >
-                        <div className="relative z-10 max-w-[200px] sm:max-w-[240px] md:max-w-[260px]">
+                        {/* Изменено: max-w-full на мобильных, чтобы текст переносился красиво */}
+                        <div className="relative z-10 max-w-full md:max-w-[200px] lg:max-w-[260px]">
                             <h3 className="text-[19px] sm:text-[22px] md:text-[25px] font-bold mb-2 md:mb-2 leading-[1.1] tracking-tight">
                                 {item.title}
                             </h3>
@@ -84,11 +86,11 @@ export default function WhyGetGrant() {
                         </div>
 
                         {item.image && (
-                            <div className={`absolute pointer-events-none transition-all duration-700 ease-out md:group-hover:scale-105 ${item.imgClass}`}>
+                            <div className={`pointer-events-none transition-all duration-700 ease-out md:group-hover:scale-105 ${item.imgClass}`}>
                                 <img
                                     src={item.image}
                                     alt={item.title}
-                                    className="w-full h-full object-contain object-right-bottom"
+                                    className="w-full h-full object-contain object-center md:object-right-bottom"
                                 />
                             </div>
                         )}

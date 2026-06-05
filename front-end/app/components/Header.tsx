@@ -15,9 +15,17 @@ export default function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
+    // Флаг монтирования компонента для предотвращения ошибок гидратации
+    const [mounted, setMounted] = useState(false);
+
     const pathname = usePathname();
     const { lang, setLang, t } = useLanguage();
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Гарантируем, что клиентский рендер совпадает с серверным при первой загрузке
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -35,7 +43,6 @@ export default function Header() {
         document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
     }, [isMobileMenuOpen]);
 
-    // Закрытие выпадашки при клике вне её области
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -74,7 +81,7 @@ export default function Header() {
 
                 <nav className="hidden xl:flex items-center gap-6">
                     {navLinks.map((link) => {
-                        const isActive = pathname.startsWith(link.href);
+                        const isActive = pathname?.startsWith(link.href);
                         return (
                             <Link
                                 key={link.href}
@@ -94,14 +101,14 @@ export default function Header() {
 
                 <div className="flex items-center gap-2 md:gap-3">
 
-                    {/* ВЫПАДАШКА ВЫБОРА ЯЗЫКА (ДЕСКТОП) */}
+                    {/* ДЕСКТОП ВЫПАДАШКА */}
                     <div className="relative hidden md:block" ref={dropdownRef}>
                         <button
                             onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
                             className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all bg-white uppercase"
                         >
                             <Globe size={15} />
-                            <span>{lang === "ru" ? "RU" : "KG"}</span>
+                            <span>{mounted && lang === "ru" ? "RU" : "KG"}</span>
                             <ChevronDown size={14} className={`transition-transform duration-200 ${isLangDropdownOpen ? "rotate-180" : ""}`} />
                         </button>
 
@@ -109,13 +116,13 @@ export default function Header() {
                             <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
                                 <button
                                     onClick={() => { setLang("ru"); setIsLangDropdownOpen(false); }}
-                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${mounted && lang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     RU
                                 </button>
                                 <button
                                     onClick={() => { setLang("ky"); setIsLangDropdownOpen(false); }}
-                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${mounted && lang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     KG
                                 </button>
@@ -159,7 +166,7 @@ export default function Header() {
                 }`}>
                     <div className="flex justify-between items-center mb-10">
                         <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">
-                            {lang === "ru" ? "Меню" : "Меню"}
+                            Меню
                         </span>
                         <button
                             onClick={() => setIsMobileMenuOpen(false)}
@@ -169,57 +176,60 @@ export default function Header() {
                         </button>
                     </div>
 
-                    {/* ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА (МОБИЛЬНЫЙ) */}
+                    {/* ТАБЫ ПЕРЕКЛЮЧЕНИЯ ЯЗЫКА (Теперь НЕ закрывают мобильное меню) */}
                     <div className="grid grid-cols-2 gap-2 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-8">
                         <button
-                            onClick={() => setLang("ru")}
-                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${lang === "ru" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                            onClick={() => setLang("ru")} // Убрали закрытие меню! Лишь меняем язык
+                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${mounted && lang === "ru" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
                         >
                             RU
                         </button>
                         <button
-                            onClick={() => setLang("ky")}
-                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${lang === "ky" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                            onClick={() => setLang("ky")} // Убрали закрытие меню! Лишь меняем язык
+                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${mounted && lang === "ky" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
                         >
                             KG
                         </button>
                     </div>
 
-                    <nav className="flex flex-col gap-4 flex-grow overflow-y-auto">
-                        {navLinks.map((link, idx) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`flex items-center gap-4 p-4 rounded-2xl text-lg font-medium transition-all ${
-                                    pathname.startsWith(link.href)
-                                        ? "bg-blue-50 text-blue-600"
-                                        : "text-gray-600 hover:bg-gray-50"
-                                }`}
-                                style={{ transitionDelay: `${idx * 50}ms` }}
-                            >
-                                <span className={pathname.startsWith(link.href) ? "text-blue-600" : "text-gray-400"}>
-                                    {link.icon}
-                                </span>
-                                {link.label}
-                            </Link>
-                        ))}
+                    {/* Ссылки навигации */}
+                    <nav className="flex flex-col gap-4 flex-grow overflow-y-auto mb-6">
+                        {navLinks.map((link, idx) => {
+                            const isActive = pathname?.startsWith(link.href);
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`flex items-center gap-4 p-4 rounded-2xl text-lg font-medium transition-all ${
+                                        isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
+                                    }`}
+                                    style={{ transitionDelay: `${idx * 50}ms` }}
+                                >
+                                    <span className={isActive ? "text-blue-600" : "text-gray-400"}>
+                                        {link.icon}
+                                    </span>
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
                     </nav>
 
-                    <div className="mt-auto pt-6 border-t border-gray-100 space-y-3 block md:hidden">
-                        <button
-                            onClick={() => { setLang("ru"); setIsLangDropdownOpen(false); }}
-                            className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                    {/* НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ ДЕЙСТВИЯ */}
+                    <div className="mt-auto pt-6 border-t border-gray-100 space-y-3 block xl:hidden">
+                        <Button
+                            onClick={() => { setIsMobileMenuOpen(false); setIsModalOpen(true); }}
+                            className="w-full bg-blue-600 py-7 text-white text-lg font-medium rounded-2xl shadow-lg shadow-blue-600/20 active:scale-95 transition-all"
                         >
-                            RU
-                        </button>
+                            {t("nav.consultation")}
+                        </Button>
 
-                        {/* Кнопка KG */}
                         <button
-                            onClick={() => { setLang("ky"); setIsLangDropdownOpen(false); }}
-                            className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${lang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center justify-center gap-2 w-full py-4 font-medium text-gray-600 bg-gray-50 rounded-2xl border border-gray-100 transition-colors hover:bg-gray-100"
                         >
-                            KG
+                            <LogIn size={20} />
+                            {t("nav.login")}
                         </button>
                     </div>
                 </div>
