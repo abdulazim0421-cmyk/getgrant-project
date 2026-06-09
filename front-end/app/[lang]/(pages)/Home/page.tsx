@@ -1,10 +1,10 @@
 // app/(pages)/Home/page.tsx
 
 import Header from "@/app/components/Header";
-import GetGrantHero from "@/app/(pages)/Home/GetGrantHero";
-import HomeContent from "@/app/(pages)/Home/HomeContent";
+import GetGrantHero from "@/app/[lang]/(pages)/Home/GetGrantHero";
+import HomeContent from "@/app/[lang]/(pages)/Home/HomeContent";
 import GetGrantExamGrid from "./GetGrantExamGrid";
-import BentoGrid from "@/app/(pages)/Home/BentoGrid";
+import BentoGrid from "@/app/[lang]/(pages)/Home/BentoGrid";
 import Footer from "@/app/components/Footer";
 
 async function fetchStrapiData(endpoint: string) {

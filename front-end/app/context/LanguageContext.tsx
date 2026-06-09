@@ -189,15 +189,6 @@ const translations: Record<Lang, Record<string, string>> = {
         "programs.grid.showmore": "Показать еще",
         "programs.grid.collapse": "Свернуть",
         "programs.grid.notfound": "Программы не найдены. Попробуйте изменить фильтры.",
-        averageSalary: "Средняя зарплата",
-        careerPaths: "Карьерные пути:",
-        noImage: "Нет изображения программы",
-        year1: "год",
-        year2: "года",
-        year5: "лет",
-        vuz1: "ВУЗ",
-        vuz2: "ВУЗа",
-        vuz5: "ВУЗов"
     },
 
     ky: {
@@ -376,34 +367,33 @@ const translations: Record<Lang, Record<string, string>> = {
         "programs.grid.showmore": "Дагы көрсөтүү",
         "programs.grid.collapse": "Жыйыштыруу",
         "programs.grid.notfound": "Программалар табылган жок. Фильтрлерди өзгөртүп көрүңүз.",
-            averageSalary: "Орточо айлык акы",
-            careerPaths: "Карьералык жолдор:",
-            noImage: "Программанын сүрөтү жок",
-            year1: "жыл",
-            year2: "жыл",
-            year5: "жыл",
-            vuz1: "ЖОГ",
-            vuz2: "ЖОГ",
-            vuz5: "ЖОГ"
     },
 };
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [lang, setLangState] = useState<Lang>("ru");
-    const [mounted, setMounted] = useState(false);
+export function LanguageProvider({
+                                     children,
+                                     initialLang = "ru",
+                                 }: {
+    children: ReactNode;
+    initialLang?: Lang;
+}) {
+    const [lang, setLangState] = useState<Lang>(initialLang);
 
-    // Читаем язык из localStorage при загрузке
+    // Синхронизируем с cookie при первой загрузке на клиенте
     useEffect(() => {
-        const saved = localStorage.getItem("lang") as Lang | null;
-        if (saved === "ru" || saved === "ky") {
-            setLangState(saved);
+        const cookieLang = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("lang="))
+            ?.split("=")[1] as Lang | undefined;
+
+        if (cookieLang === "ru" || cookieLang === "ky") {
+            setLangState(cookieLang);
         }
-        setMounted(true);
     }, []);
 
     const setLang = (newLang: Lang) => {
         setLangState(newLang);
-        localStorage.setItem("lang", newLang);
+        document.cookie = `lang=${newLang};path=/;max-age=31536000;SameSite=Lax`;
     };
 
     const t = (key: string): string => {
@@ -416,7 +406,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         </LanguageContext.Provider>
     );
 }
-
 export function useLanguage() {
     const ctx = useContext(LanguageContext);
     if (!ctx) {

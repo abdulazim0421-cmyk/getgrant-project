@@ -123,7 +123,7 @@ export default function ConsultationModal({ isOpen, onClose }: ConsultationModal
                                 />
                                 <span className="text-xs text-[#667085] leading-relaxed">
                   {t("modal.agree")}{" "}
-                                    <a href="/front-end/app/(pages)/privacy" className="text-[#2563EB] underline hover:no-underline">
+                                    <a href="/front-end/app/%5Blang%5D/(pages)/privacy" className="text-[#2563EB] underline hover:no-underline">
                     {t("modal.agree.link")}
                   </a>
                 </span>
