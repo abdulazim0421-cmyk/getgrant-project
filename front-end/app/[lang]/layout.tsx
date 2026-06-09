@@ -1,7 +1,7 @@
 import Providers from "@/app/components/Providers";
 
 export async function generateStaticParams() {
-    return [{ lang: "ru" }, { lang: "ky" }];
+    return [{ lang: "ru" }, { lang: "kg" }];
 }
 
 interface LangLayoutProps {
@@ -11,7 +11,7 @@ interface LangLayoutProps {
 
 export default async function LangLayout({ children, params }: LangLayoutProps) {
     const resolvedParams = await params;
-    const lang = resolvedParams.lang === "ky" ? "ky" : "ru";
+    const lang = resolvedParams.lang === "kg" ? "kg" : "ru";
 
     return (
         <Providers initialLang={lang}>

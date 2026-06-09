@@ -112,8 +112,8 @@ export default function Header() {
                                     RU
                                 </button>
                                 <button
-                                    onClick={() => { setLang("ky"); setIsLangDropdownOpen(false); }}
-                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ky" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    onClick={() => { setLang("kg"); setIsLangDropdownOpen(false); }}
+                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     KG
                                 </button>
@@ -171,8 +171,8 @@ export default function Header() {
                             RU
                         </button>
                         <button
-                            onClick={() => setLang("ky")}
-                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${currentLang === "ky" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
+                            onClick={() => setLang("kg")}
+                            className={`flex items-center justify-center py-2.5 rounded-lg text-sm font-bold transition-all ${currentLang === "kg" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500"}`}
                         >
                             KG
                         </button>

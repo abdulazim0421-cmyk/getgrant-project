@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const locales = ["ru", "ky"];
+const locales = ["ru", "kg"];
 const defaultLocale = "ru";
 
 export function middleware(request: NextRequest) {
@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/${locale}/Home`, request.url));
     }
 
-    // 3. Проверяем, начинается ли уже путь с существующей локали (/ru... или /ky...)
+    // 3. Проверяем, начинается ли уже путь с существующей локали (/ru... или /kg...)
     const pathnameHasLocale = locales.some(
         (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
     );

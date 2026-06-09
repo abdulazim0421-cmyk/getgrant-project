@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Lang = "ru" | "ky";
+type Lang = "ru" | "kg";
 
 interface LanguageContextType {
     lang: Lang;
@@ -191,7 +191,7 @@ const translations: Record<Lang, Record<string, string>> = {
         "programs.grid.notfound": "Программы не найдены. Попробуйте изменить фильтры.",
     },
 
-    ky: {
+    kg: {
         "nav.universities": "Университеттер",
         "nav.countries": "Өлкөлөр",
         "nav.programs": "Программалар",
@@ -306,11 +306,11 @@ const translations: Record<Lang, Record<string, string>> = {
         "about.label": "Биз жөнүндө",
         "about.hero.title1": "БИЗ КЫЯЛДАРДЫ",
         "about.hero.title2": "ЧЫНДЫККА АЙЛАНДЫРАБЫЗ",
-        "about.hero.desc": "GetGrant — Бишкектеги лицензияланган билим берүү борбору. 2018-жылдан бери 9–11-класс окуучуларына дүйнөнүн эң жакшы университеттерине кабыл алынууга жардам берип келебиз. 500дөн ашык ийгиликтүү окуя.",
+        "about.hero.desc": "GetGrant — Бишкектеги лицензияланган билим берүү борбору. 2018-жылдан бери 9–11-класс окуучуларына дүйнөнүн эң жакшы университеттерине кабыл алынууга жардам берип келебиз. 500ден ашык ийгиликтүү окуя.",
         "about.hero.btn": "Биздин университеттер",
         "about.mission.title": "Биздин миссия",
         "about.mission.p1": "Борбордук Азиядагы ар бир жөндөмдүү студент үчүн сапаттуу чет өлкөлүк билим жеткиликтүү деп ишенебиз — жөн гана кантип экенин билүү керек.",
-        "about.mission.p2": "GetGrant тоскоолдуктарды жоюп берет: тилдик, маалыматтык, бюрократиялык. Университетти тандоодон виза алууга чейинки бардык татаалдыкты биз өз мойнубузга алабыз.",
+        "about.mission.p2": "GetGrant тоскообдуктарды жоюп берет: тилдик, маалыматтык, бюрократиялык. Университетти тандоодон виза алууга чейинки бардык татаалдыкты биз өз мойнубузга алабыз.",
         "about.mission.check1": "Ар бир студент үчүн жеке менеджер",
         "about.mission.check2": "Тандоодон учушка чейин толук колдоо",
         "about.mission.check3": "Кабыл алуу статусун ачык көзөмөлдөө",
@@ -386,7 +386,7 @@ export function LanguageProvider({
             .find((row) => row.startsWith("lang="))
             ?.split("=")[1] as Lang | undefined;
 
-        if (cookieLang === "ru" || cookieLang === "ky") {
+        if (cookieLang === "ru" || cookieLang === "kg") {
             setLangState(cookieLang);
         }
     }, []);
@@ -406,6 +406,7 @@ export function LanguageProvider({
         </LanguageContext.Provider>
     );
 }
+
 export function useLanguage() {
     const ctx = useContext(LanguageContext);
     if (!ctx) {
