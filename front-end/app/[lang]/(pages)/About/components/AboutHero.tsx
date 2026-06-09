@@ -2,32 +2,31 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function AboutHero() {
     const { t } = useLanguage();
 
     return (
-        <section className="bg-white py-16">
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
-                <motion.p className="text-sm text-gray-400 mb-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <section className="bg-white py-12 sm:py-16 md:py-20 lg:py-24 border-b border-[#EAECF0]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+                <p className="text-xs sm:text-sm font-semibold tracking-wide text-gray-400 uppercase mb-3">
                     {t("about.label")}
-                </motion.p>
-                <motion.h1 className="text-5xl lg:text-6xl font-black leading-tight mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}>
+                </p>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] mb-5">
                     <span className="text-slate-900">{t("about.hero.title1")}</span>
-                    <br />
-                    <span className="text-blue-600">{t("about.hero.title2")}</span>
-                </motion.h1>
-                <motion.p className="text-base text-slate-600 max-w-3xl mb-8 leading-relaxed" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.2 }}>
+                    <br className="hidden sm:inline" />
+                    <span className="text-blue-600"> {t("about.hero.title2")}</span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-3xl mb-8 leading-relaxed">
                     {t("about.hero.desc")}
-                </motion.p>
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }}>
-                    <Link href="/Universities" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-blue-600 text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-colors group">
+                </p>
+                <div>
+                    <Link href="/Universities" className="inline-flex items-center justify-center w-full sm:w-auto gap-2 px-6 py-3 rounded-xl border border-blue-600 text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-all duration-200 group active:scale-98">
                         {t("about.hero.btn")}
                         <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
                     </Link>
-                </motion.div>
+                </div>
             </div>
         </section>
     );

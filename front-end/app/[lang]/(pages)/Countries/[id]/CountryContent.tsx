@@ -1,5 +1,5 @@
-// app/Countries/[id]/CountryContent.tsx
-import { GraduationCap, Briefcase, Lightbulb, Star } from "lucide-react";
+import { GraduationCap, Briefcase, Lightbulb, Star, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import CountryHero from "./components/CountryHero";
@@ -44,7 +44,7 @@ async function getCountry(slug: string) {
             ctaTitle: `Готовы начать обучение в ${item.name}?`,
 
             advantages: (item.advantages ?? []).map((a: any) => ({
-                icon:  ICON_MAP[a.icon] ?? <Star size={20} className="text-white" />,
+                icon:  a.icon,
                 title: a.title,
                 desc:  a.text,
             })),
@@ -95,16 +95,29 @@ export default async function CountryContent({ id }: { id: string }) {
 
     if (!country) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-[#344054]">
+            <div className="min-h-screen flex items-center justify-center text-[#344054] px-4">
                 Страница не найдена для ID: {id}
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white flex flex-col">
             <Header />
-            <main className="pt-[72px]">
+            {/* Сделали адаптивный верхний отступ под шапку */}
+            <main className="flex-grow pt-20 sm:pt-24 pb-16">
+
+                {/* КОНТЕЙНЕР ДЛЯ КНОПКИ НАЗАД */}
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
+                    <Link
+                        href="/Countries"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-3.5 sm:py-2 rounded-xl border border-[#EAECF0] bg-white text-xs sm:text-sm font-semibold text-[#344054] shadow-sm hover:bg-[#F9FAFB] hover:text-[#101828] transition-all duration-200 group active:scale-98"
+                    >
+                        <ArrowLeft size={16} className="text-[#667085] transition-transform duration-200 group-hover:-translate-x-0.5" />
+                        <span>Назад к странам</span>
+                    </Link>
+                </div>
+
                 <CountryHero
                     bannerImage={country.bannerImage ?? ""}
                     name={country.name}

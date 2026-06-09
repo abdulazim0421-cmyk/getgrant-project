@@ -16,11 +16,12 @@ interface FilterSidebarProps {
     filters: Filters;
     onChange: (filters: Filters) => void;
     onReset: () => void;
+    isMobile?: boolean;
+    onClose?: () => void;
 }
 
-export default function FilterSidebar({ filters, onChange, onReset }: FilterSidebarProps) {
+export default function FilterSidebar({ filters, onChange, onReset, isMobile = false, onClose }: FilterSidebarProps) {
     const { t } = useLanguage();
-
     const TYPES = [t("filter.private"), t("filter.public")];
 
     const toggleItem = (key: "countries" | "types", value: string) => {
@@ -30,59 +31,95 @@ export default function FilterSidebar({ filters, onChange, onReset }: FilterSide
     };
 
     return (
-        <aside className="w-full bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-6 self-start">
-            <p className="font-bold text-gray-900 text-base">{t("filter.title")}</p>
+        <aside className={`w-full flex flex-col gap-6 self-start ${isMobile ? "" : "bg-white rounded-2xl border border-gray-100 shadow-sm p-6"}`}>
+            {!isMobile && <p className="font-bold text-gray-900 text-base">{t("filter.title")}</p>}
 
+            {/* Поиск */}
             <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">{t("filter.search")}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">{t("filter.search")}</p>
                 <div className="relative">
-                    <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
                         placeholder={t("filter.search.placeholder")}
                         value={filters.search}
                         onChange={(e) => onChange({ ...filters, search: e.target.value })}
-                        className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-lg outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder:text-gray-400"
+                        className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition placeholder:text-gray-400"
                     />
                 </div>
             </div>
 
+            {/* Страны */}
             <div>
-                <p className="text-sm font-semibold text-gray-700 mb-3">{t("filter.country")}</p>
-                <div className="flex flex-col gap-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("filter.country")}</p>
+                <div className="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1">
                     {COUNTRIES.map((country) => (
-                        <label key={country} className="flex items-center gap-2.5 cursor-pointer group">
-                            <input type="checkbox" checked={filters.countries.includes(country)} onChange={() => toggleItem("countries", country)} className="w-4 h-4 rounded border-gray-300 text-blue-600 accent-blue-600 cursor-pointer" />
-                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{country}</span>
+                        <label key={country} className="flex items-center gap-3 cursor-pointer group select-none">
+                            <input
+                                type="checkbox"
+                                checked={filters.countries.includes(country)}
+                                onChange={() => toggleItem("countries", country)}
+                                className="w-4.5 h-4.5 rounded-md border-gray-300 text-blue-600 accent-blue-600 cursor-pointer focus:ring-0"
+                            />
+                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">{country}</span>
                         </label>
                     ))}
                 </div>
             </div>
 
+            {/* Тип */}
             <div>
-                <p className="text-sm font-semibold text-gray-700 mb-3">{t("filter.type")}</p>
-                <div className="flex flex-col gap-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("filter.type")}</p>
+                <div className="flex flex-col gap-2.5">
                     {TYPES.map((type) => (
-                        <label key={type} className="flex items-center gap-2.5 cursor-pointer group">
-                            <input type="checkbox" checked={filters.types.includes(type)} onChange={() => toggleItem("types", type)} className="w-4 h-4 rounded border-gray-300 text-blue-600 accent-blue-600 cursor-pointer" />
-                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">{type}</span>
+                        <label key={type} className="flex items-center gap-3 cursor-pointer group select-none">
+                            <input
+                                type="checkbox"
+                                checked={filters.types.includes(type)}
+                                onChange={() => toggleItem("types", type)}
+                                className="w-4.5 h-4.5 rounded-md border-gray-300 text-blue-600 accent-blue-600 cursor-pointer focus:ring-0"
+                            />
+                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">{type}</span>
                         </label>
                     ))}
                 </div>
             </div>
 
+            {/* Стоимость */}
             <div>
-                <p className="text-sm font-semibold text-gray-700 mb-3">{t("filter.cost")}</p>
-                <input type="range" min={0} max={100000} step={1000} value={filters.maxCost} onChange={(e) => onChange({ ...filters, maxCost: Number(e.target.value) })} className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-blue-600 bg-gray-200" />
-                <div className="flex justify-between text-xs text-gray-400 mt-1.5">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">{t("filter.cost")}</p>
+                <input
+                    type="range"
+                    min={0}
+                    max={100000}
+                    step={1000}
+                    value={filters.maxCost}
+                    onChange={(e) => onChange({ ...filters, maxCost: Number(e.target.value) })}
+                    className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-blue-600 bg-gray-100"
+                />
+                <div className="flex justify-between text-xs text-gray-500 font-medium mt-2">
                     <span>$0</span>
-                    <span>${filters.maxCost.toLocaleString("en-US")}</span>
+                    <span className="text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">${filters.maxCost.toLocaleString("en-US")}</span>
                 </div>
             </div>
 
-            <button onClick={onReset} className="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-medium py-2.5 rounded-md transition-all">
-                {t("filter.reset")}
-            </button>
+            {/* Кнопки действий */}
+            <div className="flex flex-col gap-2 mt-2 shrink-0">
+                {isMobile && onClose && (
+                    <button
+                        onClick={onClose}
+                        className="w-full bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold py-3 rounded-xl transition-all"
+                    >
+                        {t("filter.apply") === "filter.apply" ? "Применить фильтры" : (t("filter.apply") || "Применить фильтры")}
+                    </button>
+                )}
+                <button
+                    onClick={onReset}
+                    className={`w-full text-sm font-semibold py-3 rounded-xl transition-all active:scale-95 ${isMobile ? "bg-gray-50 text-gray-600 hover:bg-gray-100" : "bg-blue-50 text-blue-600 hover:bg-blue-100"}`}
+                >
+                    {t("filter.reset")}
+                </button>
+            </div>
         </aside>
     );
 }

@@ -19,34 +19,47 @@ export default function CountryCard({ country }: { country: Country }) {
     const { t } = useLanguage();
 
     return (
-        <div className="group flex flex-col w-full max-w-[305px] p-[10px] pb-[20px] gap-[10px] rounded-[16px] border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-            <div className="relative h-[180px] rounded-[8px] overflow-hidden bg-slate-200">
+        <div className="group flex flex-col w-full sm:max-w-[305px] mx-auto p-2.5 pb-5 gap-3 rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
+            {/* Контейнер изображения с фиксированным соотношением сторон на мобилках */}
+            <div className="relative w-full h-[200px] sm:h-[180px] rounded-xl overflow-hidden bg-slate-100 shrink-0">
                 {country.image ? (
-                    <Image src={country.image} alt={country.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="305px" unoptimized />
+                    <Image
+                        src={country.image}
+                        alt={country.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 305px"
+                        unoptimized
+                    />
                 ) : (
                     <div className="w-full h-full bg-slate-200 animate-pulse" />
                 )}
             </div>
 
-            <div className="flex items-center gap-3 bg-[#F9FAFB] rounded-[8px] p-3">
+            {/* Блок с названием и флагом */}
+            <div className="flex items-center gap-3 bg-[#F9FAFB] rounded-xl p-3 border border-[#F2F4F7]">
                 {country.flagImage ? (
-                    <div className="relative w-6 h-4 flex-shrink-0 rounded-[2px] overflow-hidden">
+                    <div className="relative w-6 h-4 flex-shrink-0 rounded-[2px] overflow-hidden shadow-sm">
                         <Image src={country.flagImage} alt={`Флаг ${country.name}`} fill className="object-cover" sizes="24px" unoptimized />
                     </div>
                 ) : (
-                    <span className="text-xl leading-none">{country.flag}</span>
+                    <span className="text-xl leading-none shrink-0">{country.flag}</span>
                 )}
-                <div>
-                    <p className="text-sm font-bold text-[#101828] leading-tight">{country.name}</p>
-                    <p className="text-xs text-[#667085] leading-tight">{country.nameEn}</p>
+                <div className="min-w-0">
+                    <p className="text-sm font-bold text-[#101828] leading-tight truncate">{country.name}</p>
+                    <p className="text-xs text-[#667085] leading-tight truncate mt-0.5">{country.nameEn}</p>
                 </div>
             </div>
 
-            <p className="text-xs text-[#344054] leading-relaxed px-1 flex-1">{country.description}</p>
+            {/* Описание страны */}
+            <p className="text-xs text-[#344054] leading-relaxed px-1 flex-1 line-clamp-3 sm:line-clamp-4">
+                {country.description}
+            </p>
 
+            {/* Кнопка перехода */}
             <Link
                 href={country.href}
-                className="mt-auto mx-1 flex items-center justify-center h-9 rounded-[8px] border border-[#1570EF] text-[#1570EF] text-xs font-semibold bg-transparent hover:bg-[#1570EF] hover:text-white transition-colors duration-200"
+                className="mt-auto mx-1 flex items-center justify-center h-10 rounded-xl border border-[#1570EF] text-[#1570EF] text-xs font-semibold bg-transparent hover:bg-[#1570EF] hover:text-white transition-all duration-200 active:scale-[0.99]"
             >
                 {t("countries.btn")}
             </Link>

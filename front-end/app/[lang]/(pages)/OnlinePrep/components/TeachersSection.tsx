@@ -25,8 +25,8 @@ export default function TeachersSection() {
     const { t } = useLanguage();
 
     return (
-        <section className="mb-14">
-            <div className="container mx-auto px-6 lg:px-12">
+        <section className="mb-10 md:mb-14 overflow-hidden">
+            <div className="w-full px-4 sm:px-6 lg:px-12">
                 <SectionHeader
                     title={t("online.teachers.title")}
                     subtitle={t("online.teachers.subtitle")}
@@ -34,13 +34,49 @@ export default function TeachersSection() {
                     onNext={() => swiperInstance?.slideNext()}
                 />
             </div>
-            <Swiper modules={[Navigation, Mousewheel]} onSwiper={setSwiperInstance} loop={true} mousewheel={{ forceToAxis: true, sensitivity: 1 }} slidesPerView="auto" spaceBetween={20} grabCursor={true} className="!px-6 lg:!px-12 !pb-4" breakpoints={{ 320: { slidesPerView: 1, spaceBetween: 15 }, 640: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 20 }, 1280: { slidesPerView: 4, spaceBetween: 20 } }}>
-                {teachers.map((teacher) => (
-                    <SwiperSlide key={teacher.id} style={{ width: "auto" }}>
-                        <TeacherCard teacher={teacher} />
-                    </SwiperSlide>
-                ))}
-            </Swiper>
+
+            <div className="mt-6">
+                <Swiper
+                    modules={[Navigation, Mousewheel]}
+                    onSwiper={setSwiperInstance}
+                    loop={true}
+                    mousewheel={{ forceToAxis: true, sensitivity: 1 }}
+                    grabCursor={true}
+                    className="!px-4 sm:!px-6 lg:!px-12 !pb-4"
+                    breakpoints={{
+                        // На мобильных экранах (до 480px) показываем 1 полноценный слайд + кусочек второго
+                        320: {
+                            slidesPerView: 1.2,
+                            spaceBetween: 16
+                        },
+                        // На экранах побольше (480px - 768px)
+                        480: {
+                            slidesPerView: 1.6,
+                            spaceBetween: 16
+                        },
+                        // Планшеты (показываем 2 полных слайда)
+                        768: {
+                            slidesPerView: 2.3,
+                            spaceBetween: 20
+                        },
+                        // Ноутбуки и десктопы (фиксированная ширина слайдов возвращается)
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 20
+                        },
+                        1280: {
+                            slidesPerView: 4,
+                            spaceBetween: 20
+                        }
+                    }}
+                >
+                    {teachers.map((teacher) => (
+                        <SwiperSlide key={teacher.id} className="h-auto">
+                            <TeacherCard teacher={teacher} />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
         </section>
     );
 }

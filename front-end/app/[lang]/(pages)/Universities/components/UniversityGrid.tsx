@@ -17,41 +17,61 @@ export default function UniversityGrid({ universities, total, onShowMore, onColl
 
     if (universities.length === 0) {
         return (
-            <div className="flex-1 flex items-center justify-center py-24 text-gray-400 text-sm">
+            <div className="flex-1 w-full flex items-center justify-center py-20 md:py-32 text-gray-400 text-sm font-medium bg-gray-50/50 rounded-2xl border border-dashed border-gray-200 px-4 text-center">
                 {t("universities.notfound")}
             </div>
         );
     }
 
     return (
-        <div className="flex-1 flex flex-col gap-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {universities.map((uni) => (<UniversityCard key={uni.id} university={uni} />))}
+        <div className="flex-1 w-full flex flex-col gap-6 md:gap-8">
+            {/* Сетка: 1 колонка на мобилках, 2 на планшетах (md), 2 на десктопе (xl) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6">
+                {universities.map((uni) => (
+                    <UniversityCard key={uni.id} university={uni} />
+                ))}
             </div>
-            <div className="flex flex-col items-center gap-4 pt-2 pb-6">
-                <div className="w-full bg-gray-100 rounded-full h-1">
-                    <div className="bg-blue-600 h-1 rounded-full transition-all duration-500" style={{ width: `${Math.round((universities.length / (total || 1)) * 100)}%` }} />
+
+            {/* Элементы управления, пагинация и прогресс-бар */}
+            <div className="flex flex-col items-center gap-4 pt-4 pb-4">
+                {/* Кастомный трек прогресс-бара */}
+                <div className="w-full max-w-xs bg-gray-100 rounded-full h-1 overflow-hidden">
+                    <div
+                        className="bg-blue-600 h-1 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${Math.round((universities.length / (total || 1)) * 100)}%` }}
+                    />
                 </div>
-                <div className="flex items-center gap-4 w-full">
-                    <div className="flex-1 h-px bg-gray-100" />
-                    <div className="flex flex-col items-center gap-3">
-                        <p className="text-xs text-gray-400">
+
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+                    <div className="hidden sm:block flex-1 h-px bg-gray-100" />
+
+                    <div className="flex flex-col items-center gap-3 w-full sm:w-auto">
+                        <p className="text-xs text-gray-400 font-medium text-center">
                             {t("universities.shown")} <span className="font-semibold text-gray-600">{universities.length}</span> {t("universities.of")} <span className="font-semibold text-gray-600">{total}</span> {t("universities.found2")}
                         </p>
-                        <div className="flex items-center gap-3">
+
+                        {/* Адаптивные кнопки: на мобилках растягиваются во всю ширину */}
+                        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto justify-center">
                             {hasMore && (
-                                <button onClick={onShowMore} className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-medium px-8 py-2.5 rounded-lg transition-all shadow-md shadow-blue-600/20 whitespace-nowrap">
+                                <button
+                                    onClick={onShowMore}
+                                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 active:scale-97 text-white text-sm font-semibold px-8 py-3 rounded-xl transition-all shadow-md shadow-blue-600/10 whitespace-nowrap"
+                                >
                                     {t("universities.showmore")}
                                 </button>
                             )}
                             {canCollapse && (
-                                <button onClick={onCollapse} className="bg-white hover:bg-gray-50 active:scale-95 text-gray-600 hover:text-gray-900 text-sm font-medium px-8 py-2.5 rounded-lg border border-gray-200 transition-all whitespace-nowrap">
+                                <button
+                                    onClick={onCollapse}
+                                    className="w-full sm:w-auto bg-white hover:bg-gray-50 active:scale-97 text-gray-600 hover:text-gray-900 text-sm font-semibold px-8 py-3 rounded-xl border border-gray-200 transition-all whitespace-nowrap"
+                                >
                                     {t("universities.collapse")}
                                 </button>
                             )}
                         </div>
                     </div>
-                    <div className="flex-1 h-px bg-gray-100" />
+
+                    <div className="hidden sm:block flex-1 h-px bg-gray-100" />
                 </div>
             </div>
         </div>

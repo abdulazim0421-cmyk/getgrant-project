@@ -6,14 +6,17 @@ import Footer from "@/app/components/Footer";
 import ProgramsCatalogLayout from "./components/ProgramsCatalogLayout";
 import { useLanguage } from "@/app/context/LanguageContext";
 
-// Функция запроса теперь принимает параметр языка (locale)
-async function fetchProgramsFromStrapi(locale: string) {
+// Вынесли функцию за пределы компонента, добавив адаптер локали Strapi
+async function fetchProgramsFromStrapi(frontendLang: string) {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+
+    // Адаптер: если на фронтенде 'kg', для Strapi преобразуем в официальный 'ky'
+    const strapiLocale = frontendLang === "kg" ? "ky" : frontendLang;
 
     try {
         const queryParams = new URLSearchParams({
             "populate": "image",
-            "locale": locale, // Передаем 'ru' или 'ky' в Strapi
+            "locale": strapiLocale,
             "timestamp": Date.now().toString()
         });
 
@@ -33,16 +36,31 @@ async function fetchProgramsFromStrapi(locale: string) {
             const item = prog.attributes ? prog.attributes : prog;
             let imgUrl = null;
 
+            // Более гибкий парсинг картинок для мультиязычных коллекций
             if (item.image) {
                 if (item.image.data) {
                     const data = item.image.data;
                     imgUrl = data.attributes?.url || data.url;
+                } else if (Array.isArray(item.image)) {
+                    imgUrl = item.image[0]?.url || item.image[0]?.attributes?.url;
                 } else {
                     imgUrl = item.image.url || item.image.attributes?.url;
                 }
             }
 
             const imageUrl = imgUrl ? `${strapiUrl}${imgUrl}` : null;
+
+            // Гибкий парсинг карьерных треков (разбиваем строку, если пришла строкой в переводах)
+            let parsedCareerPaths = ["Разработчик", "Аналитик"];
+            if (item.careerPaths) {
+                if (Array.isArray(item.careerPaths)) {
+                    parsedCareerPaths = item.careerPaths;
+                } else if (typeof item.careerPaths === "string") {
+                    parsedCareerPaths = item.careerPaths.split(",").map((p: string) => p.trim());
+                } else {
+                    parsedCareerPaths = [item.careerPaths];
+                }
+            }
 
             return {
                 id: prog.id,
@@ -51,10 +69,7 @@ async function fetchProgramsFromStrapi(locale: string) {
                 duration: Number(item.DURATION) || Number(item.duration) || 0,
                 universitiesCount: Number(item.universitiesCount) || 12,
                 averageSalary: Number(item.averageSalary) || 75000,
-                // Если карьерные пути возвращаются строкой, делим её, если массивом — оставляем
-                careerPaths: Array.isArray(item.careerPaths)
-                    ? item.careerPaths
-                    : item.careerPaths ? [item.careerPaths] : ["Разработчик", "Аналитик"],
+                careerPaths: parsedCareerPaths,
                 category: item.category || "IT",
                 degree: item.degree || "Bachelor"
             };
@@ -67,15 +82,15 @@ async function fetchProgramsFromStrapi(locale: string) {
 }
 
 export default function ProgramsPage() {
-    const { lang } = useLanguage(); // Следим за текущим языком (ru / ky)
+    const { lang } = useLanguage();
     const [programs, setPrograms] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Каждый раз, когда пользователь меняет язык в Header, этот useEffect делает новый запрос в Strapi
     useEffect(() => {
         let isMounted = true;
         setLoading(true);
 
+        // Передаем текущий lang фронтенда ("ru" или "kg")
         fetchProgramsFromStrapi(lang).then((data) => {
             if (isMounted) {
                 setPrograms(data);

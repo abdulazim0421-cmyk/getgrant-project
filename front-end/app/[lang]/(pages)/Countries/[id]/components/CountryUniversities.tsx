@@ -1,8 +1,6 @@
-// CountryUniversities.tsx
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { BookOpen, Users, MapPin } from "lucide-react";
 import type { University } from "./types";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -16,27 +14,27 @@ function UniversityCard({ u }: { u: University }) {
 
     return (
         <div
-            className="group flex flex-col w-full p-[10px] pb-[20px] gap-[10px] rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+            className="group flex flex-col w-full p-2.5 pb-5 gap-3 rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl cursor-pointer"
             onClick={() => window.open(u.href, "_blank")}
         >
-            <div className="relative w-full h-[160px] rounded-xl overflow-hidden bg-slate-200">
+            <div className="relative w-full h-[180px] sm:h-[160px] rounded-xl overflow-hidden bg-slate-100 shrink-0">
                 {u.image ? (
-                    <Image src={u.image} alt={u.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" sizes="300px" unoptimized />
+                    <Image src={u.image} alt={u.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, 300px" unoptimized />
                 ) : (
-                    <div className="w-full h-full bg-slate-100 flex items-center justify-center text-gray-400 text-xs">
-                        {t("uni.nophoto")}
+                    <div className="w-full h-full bg-slate-50 flex items-center justify-center text-[#667085] text-xs">
+                        {t("uni.nophoto") || "Нет фото"}
                     </div>
                 )}
             </div>
-            <div className="flex flex-col gap-y-[8px]">
-                <p className="text-sm font-bold text-[#101828] leading-tight line-clamp-2">{u.name}</p>
-                <div className="flex items-center gap-3 text-xs text-[#344054]">
-                    <span className="flex items-center gap-1"><BookOpen size={13} className="text-[#1570EF]" />{u.programs}</span>
-                    <span className="flex items-center gap-1"><Users size={13} className="text-[#1570EF]" />{u.students}</span>
+            <div className="flex flex-col gap-2 px-1 flex-grow">
+                <p className="text-sm font-bold text-[#101828] leading-snug line-clamp-2 min-h-[40px]">{u.name}</p>
+                <div className="flex items-center gap-4 text-xs text-[#344054] mt-auto">
+                    <span className="flex items-center gap-1.5"><BookOpen size={14} className="text-[#1570EF]" />{u.programs}</span>
+                    <span className="flex items-center gap-1.5"><Users size={14} className="text-[#1570EF]" />{u.students}</span>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-[#1D2939]">
-                    <MapPin size={12} className="text-[#1D2939] flex-shrink-0" />
-                    <span>{u.location}</span>
+                <div className="flex items-start gap-1 text-xs text-[#1D2939] border-t border-slate-100 pt-2 mt-1">
+                    <MapPin size={14} className="text-[#475467] flex-shrink-0 mt-0.5" />
+                    <span className="text-[#475467] truncate">{u.location}</span>
                 </div>
             </div>
         </div>
@@ -47,13 +45,13 @@ export default function CountryUniversities({ universities }: CountryUniversitie
     const { t } = useLanguage();
 
     return (
-        <section className="py-16">
-            <div className="container mx-auto px-6 lg:px-12">
-                <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-bold text-[#101828]">{t("country.universities")}</h2>
-                    <Link href="/Universities" className="px-5 py-2 rounded-[8px] bg-[#1570EF] text-white text-sm font-semibold hover:bg-[#1D4ED8] transition-colors">
+        <section className="py-10 sm:py-16">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#101828] tracking-tight">{t("country.universities")}</h2>
+                    <a href="/Universities" className="inline-flex justify-center items-center px-5 py-2.5 rounded-xl bg-[#1570EF] text-white text-xs sm:text-sm font-semibold hover:bg-[#1D4ED8] transition-colors active:scale-98">
                         {t("country.universities.all")}
-                    </Link>
+                    </a>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {universities.map((u) => (<UniversityCard key={u.id} u={u} />))}

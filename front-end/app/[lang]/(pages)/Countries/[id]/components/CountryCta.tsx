@@ -1,4 +1,3 @@
-// CountryCta.tsx
 "use client";
 
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -15,16 +14,16 @@ export default function CountryCta({ ctaTitle }: CountryCtaProps) {
     const { t } = useLanguage();
 
     return (
-        <section className="py-16">
-            <div className="container mx-auto px-6 lg:px-12">
-                <div className="bg-[#F9FAFB] rounded-[24px] py-14 px-6 flex flex-col items-center text-center gap-5">
-                    <h2 className="text-2xl font-bold text-[#101828]">{ctaTitle}</h2>
-                    <p className="text-sm text-[#667085] max-w-md leading-relaxed">
+        <section className="py-10 sm:py-16">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="bg-[#F9FAFB] rounded-[24px] border border-[#EAECF0] py-10 px-5 sm:py-14 sm:px-8 flex flex-col items-center text-center gap-5 shadow-sm">
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#101828] max-w-xl tracking-tight">{ctaTitle}</h2>
+                    <p className="text-xs sm:text-sm text-[#667085] max-w-md leading-relaxed">
                         {t("nav.consultation")}
                     </p>
                     <button
                         onClick={openModal}
-                        className="px-8 py-3 rounded-[8px] bg-[#1570EF] text-white text-sm font-semibold hover:bg-[#1D4ED8] transition-colors"
+                        className="w-full sm:w-auto px-8 py-3 rounded-xl bg-[#1570EF] text-white text-xs sm:text-sm font-semibold hover:bg-[#1D4ED8] transition-all duration-200 active:scale-98 shadow-sm"
                     >
                         {t("nav.consultation")}
                     </button>

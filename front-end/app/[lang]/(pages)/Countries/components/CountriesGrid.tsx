@@ -14,6 +14,9 @@ async function getCountries(): Promise<Country[]> {
 
         const data = await res.json();
 
+        // Проверка на случай, если из Strapi пришел пустой массив или некорректные данные
+        if (!data || !data.data) return [];
+
         return data.data.map((item: any) => ({
             id: item.id,
             name: item.name,
@@ -32,5 +35,7 @@ async function getCountries(): Promise<Country[]> {
 
 export default async function CountriesGrid() {
     const countries = await getCountries();
+
+    // Передаем данные в клиентскую сетку, которая теперь умеет правильно перестраиваться
     return <CountriesGridClient countries={countries} />;
 }

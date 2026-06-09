@@ -1,4 +1,3 @@
-// CountryCosts.tsx
 "use client";
 
 import type { CostRow, CostTotal } from "./types";
@@ -13,32 +12,36 @@ export default function CountryCosts({ costRows, costTotal }: CountryCostsProps)
     const { t } = useLanguage();
 
     return (
-        <section className="py-16 bg-white">
-            <div className="container mx-auto px-6 lg:px-12">
-                <h2 className="text-2xl font-bold text-[#101828] mb-8">{t("country.costs")}</h2>
-                <div className="rounded-[16px] border border-[#EAECF0] overflow-hidden">
-                    <table className="w-full text-sm">
+        <section className="py-10 sm:py-16 bg-white">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#101828] mb-5 sm:mb-8 tracking-tight">
+                    {t("country.costs")}
+                </h2>
+
+                {/* overflow-x-auto спасает таблицу на смартфонах */}
+                <div className="w-full overflow-x-auto rounded-2xl border border-[#EAECF0] shadow-sm bg-white">
+                    <table className="w-full text-sm text-left border-collapse min-w-[540px]">
                         <thead>
-                        <tr className="border-b border-[#EAECF0]">
+                        <tr className="bg-[#F9FAFB] border-b border-[#EAECF0]">
                             {[t("country.costs.category"), t("country.costs.min"), t("country.costs.avg"), t("country.costs.max")].map((h) => (
-                                <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-[#667085]">{h}</th>
+                                <th key={h} className="px-5 py-3.5 text-xs font-semibold text-[#667085]">{h}</th>
                             ))}
                         </tr>
                         </thead>
                         <tbody>
                         {costRows.map((row, i) => (
-                            <tr key={i} className="border-b border-[#EAECF0]">
-                                <td className="px-5 py-3 text-[#344054]">{row.category}</td>
-                                <td className="px-5 py-3 text-[#344054]">{row.min}</td>
-                                <td className="px-5 py-3 font-semibold text-[#101828]">{row.avg}</td>
-                                <td className="px-5 py-3 text-[#344054]">{row.max}</td>
+                            <tr key={i} className="border-b border-[#EAECF0] hover:bg-slate-50/50 transition-colors">
+                                <td className="px-5 py-3.5 text-xs sm:text-sm text-[#344054]">{row.category}</td>
+                                <td className="px-5 py-3.5 text-xs sm:text-sm text-[#344054]">{row.min} $</td>
+                                <td className="px-5 py-3.5 text-xs sm:text-sm font-semibold text-[#101828]">{row.avg} $</td>
+                                <td className="px-5 py-3.5 text-xs sm:text-sm text-[#344054]">{row.max} $</td>
                             </tr>
                         ))}
-                        <tr className="bg-[#F9FAFB]">
-                            <td className="px-5 py-3 font-bold text-[#101828]">{t("country.costs.total")}</td>
-                            <td className="px-5 py-3 font-bold text-[#101828]">{costTotal.min}</td>
-                            <td className="px-5 py-3 font-bold text-[#101828]">{costTotal.avg}</td>
-                            <td className="px-5 py-3 font-bold text-[#101828]">{costTotal.max}</td>
+                        <tr className="bg-[#F9FAFB] font-bold">
+                            <td className="px-5 py-4 text-xs sm:text-sm text-[#101828]">{t("country.costs.total")}</td>
+                            <td className="px-5 py-4 text-xs sm:text-sm text-[#101828]">{costTotal.min} $</td>
+                            <td className="px-5 py-4 text-xs sm:text-sm text-blue-600">{costTotal.avg} $</td>
+                            <td className="px-5 py-4 text-xs sm:text-sm text-[#101828]">{costTotal.max} $</td>
                         </tr>
                         </tbody>
                     </table>

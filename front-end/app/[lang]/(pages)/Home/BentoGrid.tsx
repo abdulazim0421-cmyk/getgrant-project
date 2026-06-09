@@ -13,7 +13,9 @@ export default function WhyGetGrant() {
             description: t("bento.1.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#A16FD3] to-[#583177] text-white",
             image: "/image/student-grid1.png",
-            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[60%] sm:w-[50%] md:w-[60%] h-auto md:absolute",
+            // Абсолютное позиционирование для всех разрешений, чтобы картинка была справа
+            imgClass: "absolute right-0 bottom-0 w-[50%] sm:w-[50%] md:w-[60%] h-auto",
+            textClass: "max-w-[55%] sm:max-w-[60%] md:max-w-[280px] lg:max-w-[320px]"
         },
         {
             id: 2,
@@ -21,7 +23,8 @@ export default function WhyGetGrant() {
             description: t("bento.2.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#F5F8FE] to-[#D0EFE9] text-slate-900",
             image: "/image/student-grid2.png",
-            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[60%] sm:w-[50%] md:w-[65%] h-auto md:absolute",
+            imgClass: "absolute right-0 bottom-0 w-[45%] sm:w-[50%] md:w-[65%] h-auto",
+            textClass: "max-w-[55%] sm:max-w-[60%] md:max-w-[240px] lg:max-w-[280px]"
         },
         {
             id: 3,
@@ -29,7 +32,8 @@ export default function WhyGetGrant() {
             description: t("bento.3.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
             image: "/image/student-grid5.png",
-            imgClass: "right-0 md:right-4 bottom-0 md:top-1/2 md:-translate-y-1/2 max-md:relative max-md:mt-4 max-md:mx-auto w-[45%] sm:w-[30%] md:w-[50%] h-auto md:absolute",
+            imgClass: "absolute max-md:w-[110px] max-sm:w-[200px] right-[-4px] top-[-2px] md:top-[-8px] md:right-2 w-[48%] lg:w-[44%] h-auto",
+            textClass: "max-w-[62%] sm:max-w-[65%] md:max-w-[200px] lg:max-w-[260px]"
         },
         {
             id: 4,
@@ -37,7 +41,8 @@ export default function WhyGetGrant() {
             description: t("bento.4.desc"),
             className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-gradient-to-b from-[#FEF9E8] to-[#FDE1A7] text-slate-900",
             image: "/image/student-grid3.png",
-            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[70%] sm:w-[65%] md:w-[95%] h-auto md:absolute",
+            imgClass: "absolute right-0 bottom-0 w-[45%] sm:w-[65%] md:w-[95%] h-auto",
+            textClass: "max-w-[55%] sm:max-w-[100%] w-full"
         },
         {
             id: 5,
@@ -45,7 +50,8 @@ export default function WhyGetGrant() {
             description: t("bento.5.desc"),
             className: "col-span-1 sm:col-span-1 md:col-span-1 md:row-span-2 bg-[#EAECF0] text-slate-900",
             image: "/image/student-grid4.png",
-            imgClass: "right-0 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[80%] sm:w-full h-auto opacity-80 md:absolute",
+            imgClass: "absolute right-0 bottom-0 w-[100%] h-auto opacity-40 sm:opacity-80 md:absolute",
+            textClass: "relative z-10 w-full"
         },
         {
             id: 6,
@@ -53,7 +59,8 @@ export default function WhyGetGrant() {
             description: t("bento.6.desc"),
             className: "col-span-1 sm:col-span-2 md:col-span-2 bg-gradient-to-r from-[#F5F8FE] to-[#E9EFFD] text-slate-900",
             image: "/image/student-grid6.png",
-            imgClass: "right-0 md:right-4 bottom-0 max-md:relative max-md:mt-4 max-md:mx-auto w-[45%] sm:w-[35%] md:w-[38%] h-auto md:absolute",
+            imgClass: "absolute right-0 bottom-0 w-[45%] sm:w-[35%] md:w-[38%] h-auto",
+            textClass: "max-w-[55%] sm:max-w-[65%] md:max-w-[200px] lg:max-w-[260px]"
         },
     ];
 
@@ -68,19 +75,17 @@ export default function WhyGetGrant() {
                 </p>
             </div>
 
-            {/* Изменено: на мобилках auto-rows отключается во избежание сжатия текста */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-4 lg:gap-5 auto-rows-auto md:auto-rows-[170px]">
                 {BENEFITS.map((item) => (
                     <div
                         key={item.id}
-                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-6 md:p-7 flex flex-col justify-between cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
+                        className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-5 sm:p-6 md:p-7 min-h-[155px] sm:min-h-auto flex flex-col justify-between cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
                     >
-                        {/* Изменено: max-w-full на мобильных, чтобы текст переносился красиво */}
-                        <div className="relative z-10 max-w-full md:max-w-[200px] lg:max-w-[260px]">
-                            <h3 className="text-[19px] sm:text-[22px] md:text-[25px] font-bold mb-2 md:mb-2 leading-[1.1] tracking-tight">
+                        <div className={`relative z-10 w-full ${item.textClass}`}>
+                            <h3 className="text-[18px] sm:text-[22px] md:text-[25px] font-bold mb-1.5 md:mb-2 leading-[1.1] tracking-tight">
                                 {item.title}
                             </h3>
-                            <p className="text-[13px] md:text-[14px] leading-relaxed font-medium opacity-80">
+                            <p className="text-[12.5px] md:text-[14px] leading-relaxed font-medium opacity-80">
                                 {item.description}
                             </p>
                         </div>
@@ -90,7 +95,9 @@ export default function WhyGetGrant() {
                                 <img
                                     src={item.image}
                                     alt={item.title}
-                                    className="w-full h-full object-contain object-center md:object-right-bottom"
+                                    className={`w-full h-full object-contain object-center ${
+                                        item.id === 3 ? "object-right-top" : "object-right-bottom"
+                                    }`}
                                 />
                             </div>
                         )}

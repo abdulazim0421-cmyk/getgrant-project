@@ -5,14 +5,16 @@ import CountriesHeader from "./components/CountriesHeader";
 
 export default function CountriesPage() {
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white flex flex-col">
             <Header />
-            <main className="pt-24 pb-16">
-                <div className="container mx-auto px-6 lg:px-12">
+
+            <main className="flex-grow pt-20 sm:pt-24 pb-16">
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <CountriesHeader />
                     <CountriesGrid />
                 </div>
             </main>
+
             <Footer />
         </div>
     );
