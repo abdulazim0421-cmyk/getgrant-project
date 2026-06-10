@@ -47,7 +47,6 @@ export default function AuthModal() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Логика авторизации бэкенда / Strapi / NextAuth
         console.log({ activeTab, email, password, name });
         handleClose();
     };
@@ -62,7 +61,6 @@ export default function AuthModal() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.15 }}
                 >
-                    {/* Задний фон */}
                     <motion.div
                         className="absolute inset-0 bg-gray-950/40 backdrop-blur-sm fixed"
                         onClick={handleClose}
@@ -71,7 +69,6 @@ export default function AuthModal() {
                         exit={{ opacity: 0 }}
                     />
 
-                    {/* Тело модального окна */}
                     <motion.div
                         className="relative z-10 w-full max-w-[940px] bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[560px] md:h-[620px] my-auto"
                         initial={{ opacity: 0, scale: 0.97, y: 10 }}
@@ -79,7 +76,6 @@ export default function AuthModal() {
                         exit={{ opacity: 0, scale: 0.97, y: 10 }}
                         transition={{ duration: 0.22, ease: "easeOut" }}
                     >
-                        {/* Кнопка закрытия */}
                         <button
                             onClick={handleClose}
                             className="absolute top-4 right-4 z-20 p-2 rounded-full text-gray-400 bg-white/80 border border-gray-100 hover:bg-red-50 hover:text-red-500 md:hover:bg-gray-50 md:hover:text-gray-700 transition-colors"
@@ -87,11 +83,9 @@ export default function AuthModal() {
                             <X size={18} />
                         </button>
 
-                        {/* ЛЕВАЯ СТОРОНА: ФОРМА */}
-                        {/* Скрываем дефолтный браузерный скроллбар, чтобы дизайн оставался монолитным при переключении табов */}
+
                         <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center overflow-y-auto h-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
-                            {/* Переключение Вход / Регистрация */}
                             <div className="flex gap-6 border-b border-gray-100 mb-6 text-sm font-medium">
                                 <button
                                     type="button"
@@ -229,12 +223,11 @@ export default function AuthModal() {
                             {/* Фоновое изображение студентов из макета */}
                             <div className="absolute inset-0 z-0">
                                 <Image
-                                    src="/image/auth-promo.jpg" // Путь к изображению из твоего проекта
+                                    src="/image/hero-students.jpg"
                                     alt="Students GetGrant"
                                     fill
                                     className="object-cover opacity-25 brightness-[0.75]"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
                             </div>
 
                             {/* Контент поверх картинки */}

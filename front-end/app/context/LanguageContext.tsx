@@ -466,8 +466,6 @@
             "programs.grid.showmore": "Дагы көрсөтүү",
             "programs.grid.collapse": "Жыйыштыруу",
             "programs.grid.notfound": "Программалар табылган жок. Фильтрлерди өзгөртүп көрүңүз.",
-    
-            // Авторизация секциясы (image_8.png)
             "auth.greeting": "Кош келиңиздер!",
             "auth.greeting.desc": "Окууну улантуу жана GetGrant'тын бардык мүмкүнчүлүктөрүн колдонуу үчүн аккаунтуңузга кириңиз.",
             "auth.greeting.desc.register": "Даярдыкты баштоо жана GetGrant'тын бардык мүмкүнчүлүктөрүн колдонуу үчүн аккаунт түзүңүз.",
@@ -493,8 +491,6 @@
             "auth.promo.benefit2.desc": "Тандоодон баштап кабыл алууга жана адаптацияга чейин коштойбуз",
             "auth.promo.benefit3.title": "Эл аралык мүмкүнчүлүктөр",
             "auth.promo.benefit3.desc": "Дүйнөнүн жетектөөчү университеттеринде окуу",
-    
-            // Курска Жазылуу Секциясы (image_9.png)
             "enroll.title": "Курска жазылуу",
             "enroll.placeholder.group": "Топту же башталган убакты тандаңыз",
             "enroll.label.time": "Ыңгайлуу убакты тандаңыз",
@@ -517,8 +513,6 @@
             "enroll.legal.agree4": "кайтаруу саясатынын",
             "enroll.btn.cancel": "Жокко чыгаруу",
             "enroll.btn.payment": "Төлөмгө өтүү",
-    
-            // Брондоо Секциясы (image_10.png)
             "booking.title": "МУГАЛИМГЕ ЖАЗЫЛУУ",
             "booking.teacher.specialization": "Адистиги",
             "booking.teacher.experience": "Иш тажрыйбасы",
@@ -561,7 +555,7 @@
             "modal.course.online": "Онлайн",
             "modal.course.time": "Ыңгайлуу убакты тандаңыз",
             "modal.course.time.placeholder": "Топту же башталган убакты тандаңыз",
-            "modal.course.time.morning": "Утренний топ (09:00 - 11:00)", // при необходимости скорректируй тайминги в KG
+            "modal.course.time.morning": "Утренний топ (09:00 - 11:00)",
             "modal.course.time.day": "Дневной топ (14:00 - 16:00)",
             "modal.course.time.evening": "Вечерний топ (19:00 - 21:00)",
             "modal.course.level": "Англис тилиңиздин деңгээли",
@@ -572,7 +566,6 @@
             "modal.course.price.discount": "Арзандатуу",
             "modal.course.price.total": "Төлөмдүн жыйынтыгы",
             "modal.course.submit": "Төлөмгө өтүү",
-
             "modal.teacher.sub": "Мугалим",
             "modal.teacher.format": "Сабактын форматын тандаңыз",
             "modal.teacher.indiv.title": "Жекече сабак",
@@ -597,11 +590,9 @@
     }) {
         const [lang, setLangState] = useState<Lang>(initialLang);
     
-        // Инициализируем хуки Next.js роутера внутри провайдера
         const router = useRouter();
         const pathname = usePathname();
     
-        // Синхронизируем с cookie при первой загрузке на клиенте
         useEffect(() => {
             const cookieLang = document.cookie
                 .split("; ")
@@ -612,25 +603,16 @@
                 setLangState(cookieLang);
             }
         }, []);
-    
+
         const setLang = (newLang: Lang) => {
-            // 1. Меняем стейт языка
             setLangState(newLang);
-    
-            // 2. Записываем в куки
             document.cookie = `lang=${newLang};path=/;max-age=31536000;SameSite=Lax`;
-    
-            // 3. МГНОВЕННО МЕНЯЕМ URL АДРЕС В БРАУЗЕРЕ
+
             if (pathname) {
                 const segments = pathname.split("/");
-                // segments[0] это пустая строка перед первым слэшем
-                // segments[1] это текущая локаль (например "ru" или "kg")
                 segments[1] = newLang;
-    
                 const newPath = segments.join("/");
-    
-                // Пушим новый путь, роутер Next.js бесшовно изменит /ru/Home на /kg/Home
-                router.push(newPath);
+                router.replace(newPath);
             }
         };
     

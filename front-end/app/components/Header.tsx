@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, GraduationCap, Globe, BookOpen, Clock, Users, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import ConsultationModal from "./ConsultationModal";
-import AuthModal from "./AuthModal"; // Импортируем новое модальное окно авторизации
+import AuthModal from "./AuthModal";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function Header() {
@@ -17,6 +17,7 @@ export default function Header() {
     const [mounted, setMounted] = useState(false);
 
     const pathname = usePathname();
+    const router = useRouter();
     const { lang, setLang, t } = useLanguage();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -60,9 +61,26 @@ export default function Header() {
         window.dispatchEvent(new CustomEvent("open-consultation-modal"));
     };
 
-    // Вызов глобального события открытия окна авторизации
     const handleOpenAuth = () => {
         window.dispatchEvent(new CustomEvent("open-auth-modal"));
+    };
+
+    const handleLanguageChange = (newLang: "ru" | "kg") => {
+        if (newLang === lang) return;
+
+        setLang(newLang);
+
+        if (pathname) {
+            const segments = pathname.split("/");
+            if (segments[1] === "ru" || segments[1] === "kg") {
+                segments[1] = newLang;
+            } else {
+                segments.unshift(newLang);
+            }
+            const newPath = segments.join("/");
+
+            router.push(newPath, { scroll: false });
+        }
     };
 
     const currentLang = mounted ? lang : "ru";
@@ -83,14 +101,12 @@ export default function Header() {
                     : "bg-white/90 xl:bg-transparent backdrop-blur-md xl:backdrop-blur-none py-4 xl:py-6 border-transparent"
             }`}>
 
-                {/* Логотип */}
                 <div className="flex-shrink-0 z-10">
                     <Link href={`/${currentLang}/Home`} className="relative block h-9 w-[120px] sm:h-10 sm:w-[140px] hover:opacity-80 transition-opacity">
                         <Image src="/logo/logo.svg" alt="GetGrant" fill className="object-contain object-left" priority />
                     </Link>
                 </div>
 
-                {/* Навигация */}
                 <nav className="hidden xl:flex items-center gap-6">
                     {mounted && navLinks.map((link) => {
                         const isActive = pathname?.startsWith(link.href);
@@ -98,6 +114,7 @@ export default function Header() {
                             <Link
                                 key={link.href}
                                 href={link.href}
+                                scroll={false}
                                 className={`relative py-2 text-[15px] font-medium transition-colors duration-300 group/link ${
                                     isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-950"
                                 }`}
@@ -111,10 +128,8 @@ export default function Header() {
                     })}
                 </nav>
 
-                {/* Правая часть (Языки, кнопки) */}
                 <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 z-10">
 
-                    {/* Переключатель языка десктоп */}
                     <div className="relative hidden md:block" ref={dropdownRef}>
                         <button
                             onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
@@ -128,13 +143,13 @@ export default function Header() {
                         {isLangDropdownOpen && mounted && (
                             <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50">
                                 <button
-                                    onClick={() => { setLang("ru"); setIsLangDropdownOpen(false); }}
+                                    onClick={() => { handleLanguageChange("ru"); setIsLangDropdownOpen(false); }}
                                     className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     RU
                                 </button>
                                 <button
-                                    onClick={() => { setLang("kg"); setIsLangDropdownOpen(false); }}
+                                    onClick={() => { handleLanguageChange("kg"); setIsLangDropdownOpen(false); }}
                                     className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     KG
@@ -143,7 +158,6 @@ export default function Header() {
                         )}
                     </div>
 
-                    {/* Кнопка Войти Десктоп */}
                     <button
                         onClick={handleOpenAuth}
                         className="hidden md:flex items-center gap-2 text-gray-600 font-medium hover:text-blue-600 px-3 py-2 transition-colors group/login"
@@ -152,7 +166,6 @@ export default function Header() {
                         <span className="text-sm font-semibold">{t("nav.login")}</span>
                     </button>
 
-                    {/* Кнопка Консультации Десктоп */}
                     <Button
                         onClick={handleOpenConsultation}
                         className="hidden md:flex bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-5 py-5 text-sm font-semibold shadow-md shadow-blue-600/10 active:scale-95 transition-all"
@@ -169,7 +182,6 @@ export default function Header() {
                 </div>
             </header>
 
-            {/* Мобильное меню */}
             <div className={`fixed inset-0 z-[100] ${isMobileMenuOpen ? "visible" : "invisible"}`}>
                 <div
                     className={`absolute inset-0 bg-gray-950/40 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
@@ -188,13 +200,13 @@ export default function Header() {
 
                     <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-6">
                         <button
-                            onClick={() => setLang("ru")}
+                            onClick={() => handleLanguageChange("ru")}
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "ru" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             RU
                         </button>
                         <button
-                            onClick={() => setLang("kg")}
+                            onClick={() => handleLanguageChange("kg")}
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "kg" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             KG
@@ -208,6 +220,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
+                                    scroll={false}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`flex items-center gap-3.5 p-3.5 rounded-xl text-base font-semibold transition-all ${
                                         isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
@@ -227,7 +240,6 @@ export default function Header() {
                         >
                             {t("nav.consultation")}
                         </Button>
-                        {/* Кнопка Войти Мобильная */}
                         <button
                             onClick={() => { setIsMobileMenuOpen(false); handleOpenAuth(); }}
                             className="flex items-center justify-center gap-2 w-full py-3 text-sm font-semibold text-gray-600 bg-gray-50 rounded-xl border border-gray-100 transition-colors hover:bg-gray-100"
@@ -240,7 +252,7 @@ export default function Header() {
             </div>
 
             <ConsultationModal />
-            <AuthModal /> {/* Подключаем модалку авторизации глобально */}
+            <AuthModal />
         </>
     );
 }
