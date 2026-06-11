@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "programs_cards",
+  "info": {
+    "singularName": "programs-card",
+    "pluralName": "programs-cards",
+    "displayName": "ProgramsCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "duration": {
+      "type": "string"
+    },
+    "universitiesCount": {
+      "type": "integer"
+    },
+    "averageSalary": {
+      "type": "integer"
+    },
+    "careerPaths": {
+      "type": "json"
+    },
+    "direction": {
+      "type": "enumeration",
+      "enum": [
+        "Технологии",
+        "Бизнес",
+        "Медицина",
+        "Инженерия",
+        "Искусство"
+      ]
+    },
+    "level": {
+      "type": "enumeration",
+      "enum": [
+        "Bachelor",
+        "Master",
+        "PhD",
+        "Pre-Med"
+      ]
+    },
+    "premium": {
+      "type": "boolean"
+    }
+  }
+}

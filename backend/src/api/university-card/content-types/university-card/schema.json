@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "university_cards",
+  "info": {
+    "singularName": "university-card",
+    "pluralName": "university-cards",
+    "displayName": "UniversityCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "programsCount": {
+      "type": "integer"
+    },
+    "studentsCount": {
+      "type": "integer"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "cost": {
+      "type": "integer"
+    },
+    "acceptanceRate": {
+      "type": "decimal"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Частный"
+      ]
+    }
+  }
+}

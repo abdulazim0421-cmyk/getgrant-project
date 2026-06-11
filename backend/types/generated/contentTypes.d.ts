@@ -477,6 +477,99 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiProgramsCardProgramsCard
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'programs_cards';
+  info: {
+    displayName: 'ProgramsCard';
+    pluralName: 'programs-cards';
+    singularName: 'programs-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    averageSalary: Schema.Attribute.Integer;
+    careerPaths: Schema.Attribute.JSON;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    direction: Schema.Attribute.Enumeration<
+      [
+        '\u0422\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u0438',
+        '\u0411\u0438\u0437\u043D\u0435\u0441',
+        '\u041C\u0435\u0434\u0438\u0446\u0438\u043D\u0430',
+        '\u0418\u043D\u0436\u0435\u043D\u0435\u0440\u0438\u044F',
+        '\u0418\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E',
+      ]
+    >;
+    duration: Schema.Attribute.String;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    level: Schema.Attribute.Enumeration<
+      ['Bachelor', 'Master', 'PhD', 'Pre-Med']
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::programs-card.programs-card'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    premium: Schema.Attribute.Boolean;
+    publishedAt: Schema.Attribute.DateTime;
+    universitiesCount: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiUniversityCardUniversityCard
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'university_cards';
+  info: {
+    displayName: 'UniversityCard';
+    pluralName: 'university-cards';
+    singularName: 'university-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    acceptanceRate: Schema.Attribute.Decimal;
+    city: Schema.Attribute.String;
+    cost: Schema.Attribute.Integer;
+    country: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::university-card.university-card'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    programsCount: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.String;
+    studentsCount: Schema.Attribute.Integer;
+    type: Schema.Attribute.Enumeration<
+      ['\u0427\u0430\u0441\u0442\u043D\u044B\u0439']
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -989,6 +1082,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::programs-card.programs-card': ApiProgramsCardProgramsCard;
+      'api::university-card.university-card': ApiUniversityCardUniversityCard;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
