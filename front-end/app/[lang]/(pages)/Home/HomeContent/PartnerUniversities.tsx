@@ -16,30 +16,42 @@ interface PartnerUniversitiesProps {
 
 function UniversityCard({ university }: { university: any }) {
     if (!university) return null;
+
+    const attr = university.attributes ? university.attributes : university;
+    if (!attr) return null;
+
     const { t } = useLanguage();
     const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-    const imageUrl = university.image?.url ? `${STRAPI_URL}${university.image.url}` : null;
+
+    const imageObj = attr.image?.data?.attributes || attr.image;
+    let imageUrl = null;
+    if (imageObj?.url) {
+        imageUrl = imageObj.url.startsWith("http")
+            ? imageObj.url
+            : `${STRAPI_URL}${imageObj.url}`;
+    }
 
     return (
         <div className="group flex flex-col w-[300px] p-[10px] pb-[20px] gap-[10px] rounded-2xl border border-[#EAECF0] bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl cursor-pointer">
             <div className="relative w-full h-[160px] rounded-xl overflow-hidden bg-slate-200">
                 {imageUrl ? (
-                    <Image src={imageUrl} alt={university.name || "University"} fill className="object-cover scale-100 transition-transform duration-500 ease-out group-hover:scale-110" sizes="300px" unoptimized />
+                    <Image src={imageUrl} alt={attr.name || "University"} fill className="object-cover scale-100 transition-transform duration-500 ease-out group-hover:scale-110" sizes="300px" unoptimized />
                 ) : (
                     <div className="w-full h-full bg-slate-100 flex items-center justify-center text-gray-400 text-xs">{t("uni.nophoto")}</div>
                 )}
             </div>
             <div className="flex flex-col gap-y-[8px]">
-                <p className="text-sm font-bold text-[#101828] leading-tight line-clamp-2 min-h-[40px]">{university.name}</p>
+                <p className="text-sm font-bold text-[#101828] leading-tight line-clamp-2 min-h-[40px]">{attr.name}</p>
                 <div className="flex items-center gap-3 text-xs text-[#344054]">
-                    <span className="flex items-center gap-1"><BookOpen size={13} className="text-[#1570EF]" />{university.programsCount || "0"}</span>
-                    <span className="flex items-center gap-1"><Users size={13} className="text-[#1570EF]" />{university.studentsCount || "0"}</span>
+                    <span className="flex items-center gap-1"><BookOpen size={13} className="text-[#1570EF]" />{attr.programsCount || "0"}</span>
+                    <span className="flex items-center gap-1"><Users size={13} className="text-[#1570EF]" />{attr.studentsCount || "0"}</span>
                 </div>
-                {university.location && (
+                {/* Меняем attr.location на attr.city */}
+                {attr.city && (
                     <div className="flex items-center gap-1 text-xs text-[#1D2939]">
                         <MapPin size={12} className="text-[#1D2939] flex-shrink-0" />
-                        <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(university.location)}`} target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors cursor-pointer line-clamp-1">
-                            {university.location}
+                        <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(attr.city)}`} target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors cursor-pointer line-clamp-1">
+                            {attr.city}
                         </a>
                     </div>
                 )}
@@ -68,16 +80,34 @@ export function PartnerUniversitiesRaw({ partnerUniversities = [] }: PartnerUniv
                     onPrev={() => swiperInstance?.slidePrev()}
                     onNext={() => swiperInstance?.slideNext()}
                 />
+
+                {isMounted ? (
+                    <Swiper
+                        modules={[Navigation, Mousewheel]}
+                        onSwiper={setSwiperInstance}
+                        loop={partnerUniversities.length > 3}
+                        mousewheel={{ forceToAxis: true, sensitivity: 1 }}
+                        slidesPerView="auto"
+                        spaceBetween={20}
+                        grabCursor={true}
+                        className="!pb-4"
+                    >
+                        {partnerUniversities.map((uni) => (
+                            <SwiperSlide key={uni.id} style={{ width: "auto" }}>
+                                <UniversityCard university={uni} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <div className="flex gap-5 overflow-hidden !pb-4">
+                        {partnerUniversities.slice(0, 4).map((uni) => (
+                            <div key={uni.id} style={{ width: "auto" }}>
+                                <UniversityCard university={uni} />
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
-            {isMounted ? (
-                <Swiper modules={[Navigation, Mousewheel]} onSwiper={setSwiperInstance} loop={partnerUniversities.length > 3} mousewheel={{ forceToAxis: true, sensitivity: 1 }} slidesPerView="auto" spaceBetween={20} grabCursor={true} className="!px-6 lg:!px-12 !pb-4">
-                    {partnerUniversities.map((uni) => (<SwiperSlide key={uni.id} style={{ width: "auto" }}><UniversityCard university={uni} /></SwiperSlide>))}
-                </Swiper>
-            ) : (
-                <div className="flex gap-5 overflow-hidden px-6 lg:px-12 !pb-4">
-                    {partnerUniversities.slice(0, 4).map((uni) => (<div key={uni.id} style={{ width: "auto" }}><UniversityCard university={uni} /></div>))}
-                </div>
-            )}
         </section>
     );
 }

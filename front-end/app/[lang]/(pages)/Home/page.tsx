@@ -1,4 +1,3 @@
-// app/(pages)/Home/page.tsx
 
 import Header from "@/app/components/Header";
 import GetGrantHero from "@/app/[lang]/(pages)/Home/GetGrantHero";
@@ -20,8 +19,6 @@ async function fetchStrapiData(endpoint: string) {
         }
 
         const json = await res.json();
-
-        // ← Добавляем лог чтобы видеть что реально приходит
         console.log(`[${endpoint}] получено записей:`, json.data?.length ?? 0);
 
         return json.data || [];
@@ -32,10 +29,11 @@ async function fetchStrapiData(endpoint: string) {
 }
 
 export default async function Home() {
+    // ЗАМЕНЕНО: Переключаем на новые эндпоинты со скриншота Strapi
     const [countries, majors, partnerUniversities] = await Promise.all([
-        fetchStrapiData("country-cards"),
-        fetchStrapiData("programs-card-heroes"),
-        fetchStrapiData("university-card-heroes"),
+        fetchStrapiData("countries-homes"),
+        fetchStrapiData("programs-homes"),
+        fetchStrapiData("university-homes"),
     ]);
 
     return (

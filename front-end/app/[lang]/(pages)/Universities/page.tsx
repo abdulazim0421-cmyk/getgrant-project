@@ -8,24 +8,49 @@ async function getUniversities() {
         const res = await fetch(`${strapiUrl}/api/university-cards?populate=image`, { cache: "no-store" });
         if (!res.ok) return [];
         const json = await res.json();
-        return (json.data || []).map((uni: any) => ({
-            id: uni.id,
-            name: uni.title || "Без названия",
-            image: uni.image?.url ? `${strapiUrl}${uni.image.url}` : "",
-            programsCount: Number(uni.programsCount) || 0,
-            studentsCount: Number(uni.studentsCount) || 0,
-            location: { city: uni.city || "", state: uni.state || "", country: uni.country || "" },
-            cost: Number(uni.cost) || 0,
-            acceptanceRate: Number(uni.acceptanceRate) || 0,
-            type: uni.type === "private" ? "Частный" : "Государственный",
-        }));
+
+        return (json.data || []).map((uni: any) => {
+            const attr = uni;
+
+            // image — массив, берём первый элемент
+            const imageObj = Array.isArray(attr.image) ? attr.image[0] : attr.image;
+            let imageUrl = "";
+            if (imageObj?.url) {
+                imageUrl = imageObj.url.startsWith("http")
+                    ? imageObj.url
+                    : `${strapiUrl}${imageObj.url}`;
+            }
+
+            let universityType = "Государственный";
+            if (attr.type === "private" || attr.type === "Частный") {
+                universityType = "Частный";
+            }
+
+            return {
+                id: uni.id,
+                name: attr.name || "Без названия",
+                image: imageUrl,
+                programsCount: attr.programsCount ?? 0,
+                studentsCount: attr.studentsCount ?? 0,
+                location: {
+                    city: attr.city || "",
+                    state: attr.state || "",
+                    country: attr.country || ""
+                },
+                cost: attr.cost ?? 0,
+                acceptanceRate: attr.acceptanceRate ?? 0,
+                type: universityType,
+            };
+        });
     } catch (error) {
+        console.error("Error fetching universities:", error);
         return [];
     }
 }
 
 export default async function UniversitiesPage() {
     const universitiesData = await getUniversities();
+
     return (
         <div className="min-h-screen bg-white">
             <Header />

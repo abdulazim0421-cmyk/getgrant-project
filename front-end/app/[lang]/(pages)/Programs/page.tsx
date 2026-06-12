@@ -6,11 +6,9 @@ import Footer from "@/app/components/Footer";
 import ProgramsCatalogLayout from "./components/ProgramsCatalogLayout";
 import { useLanguage } from "@/app/context/LanguageContext";
 
-// Вынесли функцию за пределы компонента, добавив адаптер локали Strapi
 async function fetchProgramsFromStrapi(frontendLang: string) {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-
-    // Адаптер: если на фронтенде 'kg', для Strapi преобразуем в официальный 'ky'
+    // Корректируем локаль для Киргизии (kg -> ky)
     const strapiLocale = frontendLang === "kg" ? "ky" : frontendLang;
 
     try {
@@ -33,45 +31,44 @@ async function fetchProgramsFromStrapi(frontendLang: string) {
         const strapiData = json.data || [];
 
         return strapiData.map((prog: any) => {
-            const item = prog.attributes ? prog.attributes : prog;
-            let imgUrl = null;
+            // Для Strapi v5 работаем напрямую с объектом prog, убирая прослойку attributes
+            const attr = prog;
 
-            // Более гибкий парсинг картинок для мультиязычных коллекций
-            if (item.image) {
-                if (item.image.data) {
-                    const data = item.image.data;
-                    imgUrl = data.attributes?.url || data.url;
-                } else if (Array.isArray(item.image)) {
-                    imgUrl = item.image[0]?.url || item.image[0]?.attributes?.url;
-                } else {
-                    imgUrl = item.image.url || item.image.attributes?.url;
-                }
+            // Обработка картинки в стиле Strapi v5 (проверяем массив или одиночный объект)
+            const imageObj = Array.isArray(attr.image) ? attr.image[0] : attr.image;
+            let imageUrl = "";
+            if (imageObj?.url) {
+                imageUrl = imageObj.url.startsWith("http")
+                    ? imageObj.url
+                    : `${strapiUrl}${imageObj.url}`;
             }
 
-            const imageUrl = imgUrl ? `${strapiUrl}${imgUrl}` : null;
-
-            // Гибкий парсинг карьерных треков (разбиваем строку, если пришла строкой в переводах)
-            let parsedCareerPaths = ["Разработчик", "Аналитик"];
-            if (item.careerPaths) {
-                if (Array.isArray(item.careerPaths)) {
-                    parsedCareerPaths = item.careerPaths;
-                } else if (typeof item.careerPaths === "string") {
-                    parsedCareerPaths = item.careerPaths.split(",").map((p: string) => p.trim());
+            // Безопасный парсинг карьерных треков (карьерные пути в Strapi у тебя лежат как JSON/Array)
+            let parsedCareerPaths: string[] = [];
+            if (attr.careerPaths) {
+                if (Array.isArray(attr.careerPaths)) {
+                    parsedCareerPaths = attr.careerPaths;
+                } else if (typeof attr.careerPaths === "string") {
+                    // На случай, если в базу забили строкой через запятую
+                    parsedCareerPaths = attr.careerPaths.split(",").map((p: string) => p.trim());
                 } else {
-                    parsedCareerPaths = [item.careerPaths];
+                    parsedCareerPaths = [attr.careerPaths];
                 }
+            } else {
+                parsedCareerPaths = ["Разработчик", "Аналитик"]; // дефолт, если пусто
             }
 
+            // Возвращаем плоский объект, готовый для фронтенда
             return {
                 id: prog.id,
-                name: item.NAME || item.name || "Без названия",
+                name: attr.name || "Без названия",
                 image: imageUrl,
-                duration: Number(item.DURATION) || Number(item.duration) || 0,
-                universitiesCount: Number(item.universitiesCount) || 12,
-                averageSalary: Number(item.averageSalary) || 75000,
+                duration: attr.duration !== undefined && attr.duration !== null ? Number(attr.duration) : 4,
+                universitiesCount: attr.universitiesCount !== undefined && attr.universitiesCount !== null ? Number(attr.universitiesCount) : 0,
+                averageSalary: attr.averageSalary !== undefined && attr.averageSalary !== null ? Number(attr.averageSalary) : 0,
                 careerPaths: parsedCareerPaths,
-                category: item.category || "IT",
-                degree: item.degree || "Bachelor"
+                category: attr.category || "IT",
+                degree: attr.degree || "Bachelor"
             };
         });
 
@@ -90,7 +87,6 @@ export default function ProgramsPage() {
         let isMounted = true;
         setLoading(true);
 
-        // Передаем текущий lang фронтенда ("ru" или "kg")
         fetchProgramsFromStrapi(lang).then((data) => {
             if (isMounted) {
                 setPrograms(data);

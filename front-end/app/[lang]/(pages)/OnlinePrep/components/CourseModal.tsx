@@ -155,6 +155,7 @@ export default function CourseModal() {
                                 <div className="relative">
                                     <select
                                         required
+
                                         value={selectedTime}
                                         onChange={(e) => setSelectedTime(e.target.value)}
                                         className="w-full h-12 pl-4 pr-10 rounded-xl border border-gray-200 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition shadow-sm appearance-none cursor-pointer"
