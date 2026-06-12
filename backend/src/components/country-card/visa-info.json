@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_country_card_visa_infos",
+  "info": {
+    "displayName": "visaInfo",
+    "icon": "cast"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

@@ -477,6 +477,77 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCountriesHomeCountriesHome
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'countries_homes';
+  info: {
+    displayName: 'CountriesHome';
+    pluralName: 'countries-homes';
+    singularName: 'countries-home';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    benefits: Schema.Attribute.JSON;
+    bgImage: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    flag: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::countries-home.countries-home'
+    > &
+      Schema.Attribute.Private;
+    nameEn: Schema.Attribute.String;
+    nameRu: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    studentsCount: Schema.Attribute.String;
+    universitiesCount: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCountryCardCountryCard extends Struct.CollectionTypeSchema {
+  collectionName: 'country_cards';
+  info: {
+    displayName: 'CountryCard';
+    pluralName: 'country-cards';
+    singularName: 'country-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    advantages: Schema.Attribute.Component<'country-card.advantages', true>;
+    cardImage: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    flag: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    livingCosts: Schema.Attribute.Component<'country-card.living-cost', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::country-card.country-card'
+    > &
+      Schema.Attribute.Private;
+    nameEn: Schema.Attribute.String;
+    nameRu: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    shortDescription: Schema.Attribute.Text;
+    slug: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    visa: Schema.Attribute.Component<'country-card.visa-info', true>;
+  };
+}
+
 export interface ApiProgramsCardProgramsCard
   extends Struct.CollectionTypeSchema {
   collectionName: 'programs_cards';
@@ -494,23 +565,12 @@ export interface ApiProgramsCardProgramsCard
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    direction: Schema.Attribute.Enumeration<
-      [
-        '\u0422\u0435\u0445\u043D\u043E\u043B\u043E\u0433\u0438\u0438',
-        '\u0411\u0438\u0437\u043D\u0435\u0441',
-        '\u041C\u0435\u0434\u0438\u0446\u0438\u043D\u0430',
-        '\u0418\u043D\u0436\u0435\u043D\u0435\u0440\u0438\u044F',
-        '\u0418\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E',
-      ]
-    >;
-    duration: Schema.Attribute.String;
+    duration: Schema.Attribute.Integer;
     image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    level: Schema.Attribute.Enumeration<
-      ['Bachelor', 'Master', 'PhD', 'Pre-Med']
-    >;
+    isPremium: Schema.Attribute.Boolean;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -518,12 +578,78 @@ export interface ApiProgramsCardProgramsCard
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
-    premium: Schema.Attribute.Boolean;
     publishedAt: Schema.Attribute.DateTime;
     universitiesCount: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProgramsHomeProgramsHome
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'programs_homes';
+  info: {
+    displayName: 'ProgramsHome';
+    pluralName: 'programs-homes';
+    singularName: 'programs-home';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    averageSalary: Schema.Attribute.Integer;
+    careerPaths: Schema.Attribute.JSON;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    duration: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    isPopular: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::programs-home.programs-home'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiStatCardStatCard extends Struct.CollectionTypeSchema {
+  collectionName: 'stat_cards';
+  info: {
+    displayName: 'StatCard';
+    pluralName: 'stat-cards';
+    singularName: 'stat-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    icon: Schema.Attribute.Enumeration<
+      ['graduation, ', 'university, ', 'globe, ', 'chart']
+    >;
+    label: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::stat-card.stat-card'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    value: Schema.Attribute.String;
   };
 }
 
@@ -564,6 +690,40 @@ export interface ApiUniversityCardUniversityCard
     type: Schema.Attribute.Enumeration<
       ['\u0427\u0430\u0441\u0442\u043D\u044B\u0439']
     >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiUniversityHomeUniversityHome
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'university_homes';
+  info: {
+    displayName: 'UniversityHome';
+    pluralName: 'university-homes';
+    singularName: 'university-home';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::university-home.university-home'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    programsCount: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    studentsCount: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1082,8 +1242,13 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::countries-home.countries-home': ApiCountriesHomeCountriesHome;
+      'api::country-card.country-card': ApiCountryCardCountryCard;
       'api::programs-card.programs-card': ApiProgramsCardProgramsCard;
+      'api::programs-home.programs-home': ApiProgramsHomeProgramsHome;
+      'api::stat-card.stat-card': ApiStatCardStatCard;
       'api::university-card.university-card': ApiUniversityCardUniversityCard;
+      'api::university-home.university-home': ApiUniversityHomeUniversityHome;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

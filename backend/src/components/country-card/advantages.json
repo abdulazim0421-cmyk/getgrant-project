@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_country_card_advantages",
+  "info": {
+    "displayName": "advantages",
+    "icon": "book"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "graduation",
+        "briefcase",
+        "chart",
+        "star"
+      ]
+    }
+  },
+  "config": {}
+}

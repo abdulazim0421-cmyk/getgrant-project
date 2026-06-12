@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stat_cards",
+  "info": {
+    "singularName": "stat-card",
+    "pluralName": "stat-cards",
+    "displayName": "StatCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "value": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "enumeration",
+      "enum": [
+        "graduation, ",
+        "university, ",
+        "globe, ",
+        "chart"
+      ]
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}

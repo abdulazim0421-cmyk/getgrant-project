@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "country_cards",
+  "info": {
+    "singularName": "country-card",
+    "pluralName": "country-cards",
+    "displayName": "CountryCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "slug": {
+      "type": "string"
+    },
+    "nameRu": {
+      "type": "string"
+    },
+    "nameEn": {
+      "type": "string"
+    },
+    "cardImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "flag": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "shortDescription": {
+      "type": "text"
+    },
+    "advantages": {
+      "type": "component",
+      "component": "country-card.advantages",
+      "repeatable": true
+    },
+    "livingCosts": {
+      "type": "component",
+      "component": "country-card.living-cost",
+      "repeatable": true
+    },
+    "visa": {
+      "type": "component",
+      "component": "country-card.visa-info",
+      "repeatable": true
+    }
+  }
+}

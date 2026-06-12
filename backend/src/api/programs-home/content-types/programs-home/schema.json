@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "programs_cards",
+  "collectionName": "programs_homes",
   "info": {
-    "singularName": "programs-card",
-    "pluralName": "programs-cards",
-    "displayName": "ProgramsCard"
+    "singularName": "programs-home",
+    "pluralName": "programs-homes",
+    "displayName": "ProgramsHome"
   },
   "options": {
     "draftAndPublish": true
@@ -16,7 +16,7 @@
     },
     "image": {
       "type": "media",
-      "multiple": true,
+      "multiple": false,
       "allowedTypes": [
         "images",
         "files",
@@ -24,14 +24,11 @@
         "audios"
       ]
     },
-    "isPremium": {
+    "isPopular": {
       "type": "boolean"
     },
     "duration": {
-      "type": "integer"
-    },
-    "universitiesCount": {
-      "type": "integer"
+      "type": "string"
     },
     "averageSalary": {
       "type": "integer"

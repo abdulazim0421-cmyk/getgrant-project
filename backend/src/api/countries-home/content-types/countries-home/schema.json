@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "countries_homes",
+  "info": {
+    "singularName": "countries-home",
+    "pluralName": "countries-homes",
+    "displayName": "CountriesHome"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nameRu": {
+      "type": "string"
+    },
+    "nameEn": {
+      "type": "string"
+    },
+    "flag": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "bgImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "universitiesCount": {
+      "type": "string"
+    },
+    "studentsCount": {
+      "type": "string"
+    },
+    "benefits": {
+      "type": "json"
+    }
+  }
+}
