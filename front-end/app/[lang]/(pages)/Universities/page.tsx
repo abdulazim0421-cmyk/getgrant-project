@@ -5,14 +5,13 @@ import CatalogLayout from "./components/CatalogLayout";
 async function getUniversities() {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
     try {
-        const res = await fetch(`${strapiUrl}/api/university-cards?populate=image`, { cache: "no-store" });
+        const res = await fetch(`${strapiUrl}/api/university-cards?populate=image`, { next: { revalidate: 60 } });
         if (!res.ok) return [];
         const json = await res.json();
 
         return (json.data || []).map((uni: any) => {
             const attr = uni;
 
-            // image — массив, берём первый элемент
             const imageObj = Array.isArray(attr.image) ? attr.image[0] : attr.image;
             let imageUrl = "";
             if (imageObj?.url) {
