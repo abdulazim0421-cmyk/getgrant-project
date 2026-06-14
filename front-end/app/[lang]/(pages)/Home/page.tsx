@@ -1,4 +1,3 @@
-
 import Header from "@/app/components/Header";
 import GetGrantHero from "@/app/[lang]/(pages)/Home/GetGrantHero";
 import HomeContent from "@/app/[lang]/(pages)/Home/HomeContent";
@@ -10,7 +9,7 @@ async function fetchStrapiData(endpoint: string) {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337";
     try {
         const res = await fetch(`${strapiUrl}/api/${endpoint}?populate=*`, {
-            cache: "no-store",
+            next: { revalidate: 60 },
         });
 
         if (!res.ok) {
@@ -19,8 +18,6 @@ async function fetchStrapiData(endpoint: string) {
         }
 
         const json = await res.json();
-        console.log(`[${endpoint}] получено записей:`, json.data?.length ?? 0);
-
         return json.data || [];
     } catch (e) {
         console.error(`Strapi недоступен [${endpoint}]:`, e);
@@ -29,7 +26,6 @@ async function fetchStrapiData(endpoint: string) {
 }
 
 export default async function Home() {
-    // ЗАМЕНЕНО: Переключаем на новые эндпоинты со скриншота Strapi
     const [countries, majors, partnerUniversities] = await Promise.all([
         fetchStrapiData("countries-homes"),
         fetchStrapiData("programs-homes"),
