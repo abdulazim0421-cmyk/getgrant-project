@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
-export default function LangHome({ params }: { params: { lang: string } }) {
-    redirect(`/${params.lang}/Home`);
+export default async function LangHome({ params }: { params: Promise<{ lang: string }> }) {
+    const { lang } = await params;
+    redirect(`/${lang}/Home`);
     return null;
 }
