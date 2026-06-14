@@ -1,3 +1,4 @@
+import { Suspense } from "react"; // 1. Импортируем Suspense
 import Providers from "@/app/components/Providers";
 
 export async function generateStaticParams() {
@@ -6,7 +7,7 @@ export async function generateStaticParams() {
 
 interface LangLayoutProps {
     children: React.ReactNode;
-    params: Promise<{ lang: string }>; // Парамсы теперь строго Promise
+    params: Promise<{ lang: string }>;
 }
 
 export default async function LangLayout({ children, params }: LangLayoutProps) {
@@ -15,7 +16,10 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
 
     return (
         <Providers initialLang={lang}>
-            {children}
+
+            <Suspense fallback={null}>
+                {children}
+            </Suspense>
         </Providers>
     );
 }
