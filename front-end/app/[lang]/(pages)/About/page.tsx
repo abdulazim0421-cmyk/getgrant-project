@@ -8,12 +8,11 @@ import AboutHistory from "./components/AboutHistory";
 import AboutTeam from "./components/AboutTeam";
 import AboutLicenses from "./components/AboutLicenses";
 
-// Функция для получения данных из Strapi
 async function fetchAboutStats() {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337";
     try {
         const res = await fetch(`${strapiUrl}/api/home-statistic?populate=*`, {
-            cache: "no-store", // Чтобы данные всегда были актуальными
+            next: { revalidate: 60 },
         });
         if (!res.ok) return null;
         const json = await res.json();
@@ -25,10 +24,7 @@ async function fetchAboutStats() {
 }
 
 export default async function AboutPage() {
-    // Получаем данные перед рендерингом страницы
     const statsData = await fetchAboutStats();
-
-    // Распаковываем поля (учитываем возможную структуру Strapi v4/v5)
     const strapiStats = statsData?.attributes ? statsData.attributes : statsData;
 
     return (
