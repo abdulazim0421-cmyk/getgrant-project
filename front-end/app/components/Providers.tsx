@@ -5,7 +5,7 @@ import { LanguageProvider } from "@/app/context/LanguageContext";
 
 interface ProvidersProps {
     children: ReactNode;
-    initialLang?: "ru" | "kg"; // Вот здесь измени с "ky" на "kg"
+    initialLang?: "ru" | "kg";
 }
 
 export default function Providers({ children, initialLang = "ru" }: ProvidersProps) {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation"; // Импортируем useSearchParams
 import { Menu, X, GraduationCap, Globe, BookOpen, Clock, Users, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -11,13 +11,15 @@ import AuthModal from "./AuthModal";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function Header() {
+    const pathname = usePathname();
+    const router = useRouter();
+    const searchParams = useSearchParams(); // Хук для чтения параметров строки (например, ?menu=open)
+
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(searchParams?.get("menu") === "open");
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
 
-    const pathname = usePathname();
-    const router = useRouter();
     const { lang, setLang, t } = useLanguage();
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +67,7 @@ export default function Header() {
         window.dispatchEvent(new CustomEvent("open-auth-modal"));
     };
 
-    const handleLanguageChange = (newLang: "ru" | "kg") => {
+    const handleLanguageChange = (newLang: "ru" | "kg", isMobile: boolean = false) => {
         if (newLang === lang) return;
 
         setLang(newLang);
@@ -77,20 +79,29 @@ export default function Header() {
             } else {
                 segments.unshift(newLang);
             }
-            const newPath = segments.join("/");
+
+            const queryString = isMobile ? "?menu=open" : "";
+            const newPath = segments.join("/") + queryString;
 
             router.push(newPath, { scroll: false });
+        }
+    };
+
+    const handleCloseMobileMenu = () => {
+        setIsMobileMenuOpen(false);
+        if (searchParams?.get("menu") === "open") {
+            router.replace(pathname || "/", { scroll: false });
         }
     };
 
     const currentLang = mounted ? lang : "ru";
 
     const navLinks = [
-        { href: `/${currentLang}/Universities`, label: t("nav.universities"), icon: <GraduationCap size={18} /> },
-        { href: `/${currentLang}/Countries`,    label: t("nav.countries"),    icon: <Globe size={18} /> },
-        { href: `/${currentLang}/Programs`,     label: t("nav.programs"),     icon: <BookOpen size={18} /> },
-        { href: `/${currentLang}/OnlinePrep`,   label: t("nav.online"),       icon: <Clock size={18} /> },
-        { href: `/${currentLang}/About`,        label: t("nav.about"),        icon: <Users size={18} /> },
+        { href: `/${currentLang}/universities`, label: t("nav.universities"), icon: <GraduationCap size={18} /> },
+        { href: `/${currentLang}/countries`,    label: t("nav.countries"),    icon: <Globe size={18} /> },
+        { href: `/${currentLang}/programs`,     label: t("nav.programs"),     icon: <BookOpen size={18} /> },
+        { href: `/${currentLang}/onlineprep`,   label: t("nav.online"),       icon: <Clock size={18} /> },
+        { href: `/${currentLang}/about`,        label: t("nav.about"),        icon: <Users size={18} /> },
     ];
 
     return (
@@ -143,13 +154,13 @@ export default function Header() {
                         {isLangDropdownOpen && mounted && (
                             <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50">
                                 <button
-                                    onClick={() => { handleLanguageChange("ru"); setIsLangDropdownOpen(false); }}
+                                    onClick={() => { handleLanguageChange("ru", false); setIsLangDropdownOpen(false); }}
                                     className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     RU
                                 </button>
                                 <button
-                                    onClick={() => { handleLanguageChange("kg"); setIsLangDropdownOpen(false); }}
+                                    onClick={() => { handleLanguageChange("kg", false); setIsLangDropdownOpen(false); }}
                                     className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
                                 >
                                     KG
@@ -185,7 +196,7 @@ export default function Header() {
             <div className={`fixed inset-0 z-[100] ${isMobileMenuOpen ? "visible" : "invisible"}`}>
                 <div
                     className={`absolute inset-0 bg-gray-950/40 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={handleCloseMobileMenu}
                 />
 
                 <div className={`absolute top-0 right-0 w-full max-w-[340px] h-full bg-white shadow-2xl transition-transform duration-300 ease-in-out p-6 flex flex-col ${
@@ -193,20 +204,20 @@ export default function Header() {
                 }`}>
                     <div className="flex justify-between items-center mb-6">
                         <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">Меню</span>
-                        <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-gray-50 border border-gray-100 rounded-full hover:bg-red-50 hover:text-red-500 transition-colors">
+                        <button onClick={handleCloseMobileMenu} className="p-2 bg-gray-50 border border-gray-100 rounded-full hover:bg-red-50 hover:text-red-500 transition-colors">
                             <X size={20} />
                         </button>
                     </div>
 
                     <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-6">
                         <button
-                            onClick={() => handleLanguageChange("ru")}
+                            onClick={() => handleLanguageChange("ru", true)} // Передаем true, так как это мобильная смена
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "ru" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             RU
                         </button>
                         <button
-                            onClick={() => handleLanguageChange("kg")}
+                            onClick={() => handleLanguageChange("kg", true)} // Передаем true, так как это мобильная смена
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "kg" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             KG
@@ -221,7 +232,7 @@ export default function Header() {
                                     key={link.href}
                                     href={link.href}
                                     scroll={false}
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    onClick={handleCloseMobileMenu}
                                     className={`flex items-center gap-3.5 p-3.5 rounded-xl text-base font-semibold transition-all ${
                                         isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
                                     }`}
@@ -235,13 +246,13 @@ export default function Header() {
 
                     <div className="mt-auto pt-4 border-t border-gray-100 space-y-2.5">
                         <Button
-                            onClick={() => { setIsMobileMenuOpen(false); handleOpenConsultation(); }}
+                            onClick={() => { handleCloseMobileMenu(); handleOpenConsultation(); }}
                             className="w-full bg-blue-600 py-6 text-white text-base font-semibold rounded-xl shadow-md shadow-blue-600/10 active:scale-95 transition-all"
                         >
                             {t("nav.consultation")}
                         </Button>
                         <button
-                            onClick={() => { setIsMobileMenuOpen(false); handleOpenAuth(); }}
+                            onClick={() => { handleCloseMobileMenu(); handleOpenAuth(); }}
                             className="flex items-center justify-center gap-2 w-full py-3 text-sm font-semibold text-gray-600 bg-gray-50 rounded-xl border border-gray-100 transition-colors hover:bg-gray-100"
                         >
                             <LogIn size={18} />

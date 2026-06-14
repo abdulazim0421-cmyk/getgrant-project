@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext"; // Импортируем контекст локализации
 
 export default function AuthModal() {
-    const { t } = useLanguage(); // Подключаем хук перевода текстов
+    const { t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<"login" | "register">("login");
     const [showPassword, setShowPassword] = useState(false);

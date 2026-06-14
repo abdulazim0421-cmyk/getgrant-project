@@ -14,27 +14,27 @@ export default function Footer() {
         {
             title: "Образование",
             links: [
-                { label: "Университеты", href: "/University" },
+                { label: "Университеты", href: "/Universities" },
                 { label: "Страны", href: "/Countries" },
                 { label: "Программы", href: "/Programs" },
-                { label: "Онлайн-подготовка", href: "/Preparation" },
+                { label: "Онлайн-подготовка", href: "/OnlinePrep" },
             ],
         },
         {
             title: "Компания",
             links: [
                 { label: "О нас", href: "/About" },
-                { label: "Наша команда", href: "/Team" },
-                { label: "Партнёры", href: "/Partners" },
+                { label: "Наша команда", href: "/" },
+                { label: "Партнёры", href: "/" },
             ],
         },
         {
             title: "Поддержка",
             links: [
-                { label: "FAQ", href: "/faq" },
-                { label: "Контакты", href: "/Contacts" },
-                { label: "Блог", href: "/Blog" },
-                { label: "Документы", href: "/Docs" },
+                { label: "FAQ", href: "/" },
+                { label: "Контакты", href: "/" },
+                { label: "Блог", href: "/" },
+                { label: "Документы", href: "/" },
             ],
         },
     ];
