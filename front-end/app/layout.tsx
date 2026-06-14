@@ -10,6 +10,10 @@ export const metadata: Metadata = {
     description: "Образование за рубежом и поиск грантов",
 };
 
+export function generateStaticParams() {
+    return [{ lang: "ru" }, { lang: "en" }];
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html suppressHydrationWarning className={cn("font-sans", inter.variable)}>
