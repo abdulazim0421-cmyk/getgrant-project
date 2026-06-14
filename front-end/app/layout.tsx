@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-    return [{ lang: "ru" }, { lang: "en" }];
+    return [{ lang: "ru" }, { lang: "kg" }];
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
