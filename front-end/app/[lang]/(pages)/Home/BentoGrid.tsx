@@ -80,7 +80,7 @@ export default function WhyGetGrant() {
                         key={item.id}
                         className={`group relative overflow-hidden rounded-[24px] md:rounded-[28px] p-5 sm:p-6 md:p-7 min-h-[155px] sm:min-h-auto flex flex-col justify-between cursor-default transition-all duration-500 ease-out hover:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-1 ${item.className}`}
                     >
-                        <div className={`relative z-10 w-full ${item.textClass}`}>
+                        <div className={`relative z-9 w-full ${item.textClass}`}>
                             <h3 className="text-[18px] sm:text-[22px] md:text-[25px] font-bold mb-1.5 md:mb-2 leading-[1.1] tracking-tight">
                                 {item.title}
                             </h3>
