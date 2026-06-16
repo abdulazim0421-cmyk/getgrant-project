@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation"; // Импортируем useSearchParams
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Menu, X, GraduationCap, Globe, BookOpen, Clock, Users, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 export default function Header() {
     const pathname = usePathname();
     const router = useRouter();
-    const searchParams = useSearchParams(); // Хук для чтения параметров строки (например, ?menu=open)
+    const searchParams = useSearchParams();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(searchParams?.get("menu") === "open");
     const [isScrolled, setIsScrolled] = useState(false);
@@ -106,93 +106,102 @@ export default function Header() {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-12 flex items-center justify-between border-b transition-all duration-300 ${
+            {/* Внешний контейнер отвечает только за фон на всю ширину и бордер */}
+            <header className={`fixed top-0 left-0 right-0 w-full z-50 border-b transition-all duration-300 ${
                 isScrolled
-                    ? "bg-white py-3 shadow-sm border-[#EAECF0]"
-                    : "bg-white/90 xl:bg-transparent backdrop-blur-md xl:backdrop-blur-none py-4 xl:py-6 border-transparent"
+                    ? "bg-white shadow-sm border-[#EAECF0]"
+                    : "bg-white/90 xl:bg-transparent backdrop-blur-md xl:backdrop-blur-none border-transparent"
             }`}>
 
-                <div className="flex-shrink-0 z-10">
-                    <Link href={`/${currentLang}/Home`} className="relative block h-9 w-[120px] sm:h-10 sm:w-[140px] hover:opacity-80 transition-opacity">
-                        <Image src="/logo/logo.svg" alt="GetGrant" fill className="object-contain object-left" priority />
-                    </Link>
-                </div>
+                {/* Внутренний контейнер: Ограничивает контент до 1440px, центрирует его и полностью сохраняет вашу оригинальную анимацию скролла */}
+                <div className={`max-w-[1440px] mx-auto px-4 lg:px-6 flex items-center justify-between border-b border-transparent transition-all duration-300 ${
+                    isScrolled ? "py-3" : "py-4 xl:py-6"
+                }`}>
 
-                <nav className="hidden xl:flex items-center gap-6">
-                    {mounted && navLinks.map((link) => {
-                        const isActive = pathname?.startsWith(link.href);
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                scroll={false}
-                                className={`relative py-2 text-[15px] font-medium transition-colors duration-300 group/link ${
-                                    isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-950"
-                                }`}
-                            >
-                                {link.label}
-                                <span className={`absolute bottom-0 left-0 h-[2px] bg-blue-600 transition-all duration-300 ease-out ${
-                                    isActive ? "w-full" : "w-0 group-hover/link:w-full"
-                                }`} />
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 z-10">
-
-                    <div className="relative hidden md:block" ref={dropdownRef}>
-                        <button
-                            onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all bg-white uppercase shadow-sm"
-                        >
-                            <Globe size={15} />
-                            <span>{currentLang}</span>
-                            <ChevronDown size={14} className={`transition-transform duration-200 ${isLangDropdownOpen ? "rotate-180" : ""}`} />
-                        </button>
-
-                        {isLangDropdownOpen && mounted && (
-                            <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50">
-                                <button
-                                    onClick={() => { handleLanguageChange("ru", false); setIsLangDropdownOpen(false); }}
-                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
-                                >
-                                    RU
-                                </button>
-                                <button
-                                    onClick={() => { handleLanguageChange("kg", false); setIsLangDropdownOpen(false); }}
-                                    className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
-                                >
-                                    KG
-                                </button>
-                            </div>
-                        )}
+                    <div className="flex-shrink-0 z-10">
+                        <Link href={`/${currentLang}/Home`} className="relative block h-9 w-[120px] sm:h-10 sm:w-[140px] hover:opacity-80 transition-opacity">
+                            <Image src="/logo/logo.svg" alt="GetGrant" fill className="object-contain object-left" priority />
+                        </Link>
                     </div>
 
-                    <button
-                        onClick={handleOpenAuth}
-                        className="hidden md:flex items-center gap-2 text-gray-600 font-medium hover:text-blue-600 px-3 py-2 transition-colors group/login"
-                    >
-                        <LogIn size={18} className="group-hover/login:-translate-x-0.5 transition-transform" />
-                        <span className="text-sm font-semibold">{t("nav.login")}</span>
-                    </button>
+                    <nav className="hidden xl:flex items-center gap-6">
+                        {mounted && navLinks.map((link) => {
+                            const isActive = pathname?.startsWith(link.href);
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    scroll={false}
+                                    className={`relative py-2 text-[15px] font-medium transition-colors duration-300 group/link ${
+                                        isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-950"
+                                    }`}
+                                >
+                                    {link.label}
+                                    <span className={`absolute bottom-0 left-0 h-[2px] bg-blue-600 transition-all duration-300 ease-out ${
+                                        isActive ? "w-full" : "w-0 group-hover/link:w-full"
+                                    }`} />
+                                </Link>
+                            );
+                        })}
+                    </nav>
 
-                    <Button
-                        onClick={handleOpenConsultation}
-                        className="hidden md:flex bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-5 py-5 text-sm font-semibold shadow-md shadow-blue-600/10 active:scale-95 transition-all"
-                    >
-                        {t("nav.consultation")}
-                    </Button>
+                    <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 z-10">
 
-                    <button
-                        onClick={() => setIsMobileMenuOpen(true)}
-                        className="xl:hidden p-2.5 bg-gray-50 text-gray-900 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
-                    >
-                        <Menu size={22} />
-                    </button>
+                        <div className="relative hidden md:block" ref={dropdownRef}>
+                            <button
+                                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-blue-500 hover:text-blue-600 text-sm font-semibold text-gray-600 transition-all bg-white uppercase shadow-sm"
+                            >
+                                <Globe size={15} />
+                                <span>{currentLang}</span>
+                                <ChevronDown size={14} className={`transition-transform duration-200 ${isLangDropdownOpen ? "rotate-180" : ""}`} />
+                            </button>
+
+                            {isLangDropdownOpen && mounted && (
+                                <div className="absolute right-0 mt-1.5 w-24 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50">
+                                    <button
+                                        onClick={() => { handleLanguageChange("ru", false); setIsLangDropdownOpen(false); }}
+                                        className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    >
+                                        RU
+                                    </button>
+                                    <button
+                                        onClick={() => { handleLanguageChange("kg", false); setIsLangDropdownOpen(false); }}
+                                        className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    >
+                                        KG
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <button
+                            onClick={handleOpenAuth}
+                            className="hidden md:flex items-center gap-2 text-gray-600 font-medium hover:text-blue-600 px-3 py-2 transition-colors group/login"
+                        >
+                            <LogIn size={18} className="group-hover/login:-translate-x-0.5 transition-transform" />
+                            <span className="text-sm font-semibold">{t("nav.login")}</span>
+                        </button>
+
+                        <Button
+                            onClick={handleOpenConsultation}
+                            className="hidden md:flex bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-5 py-5 text-sm font-semibold shadow-md shadow-blue-600/10 active:scale-95 transition-all"
+                        >
+                            {t("nav.consultation")}
+                        </Button>
+
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="xl:hidden p-2.5 bg-gray-50 text-gray-900 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
+                        >
+                            <Menu size={22} />
+                        </button>
+                    </div>
+
                 </div>
             </header>
 
+            {/* Мобильное меню (осталось без изменений) */}
             <div className={`fixed inset-0 z-[100] ${isMobileMenuOpen ? "visible" : "invisible"}`}>
                 <div
                     className={`absolute inset-0 bg-gray-950/40 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
@@ -211,13 +220,13 @@ export default function Header() {
 
                     <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-6">
                         <button
-                            onClick={() => handleLanguageChange("ru", true)} // Передаем true, так как это мобильная смена
+                            onClick={() => handleLanguageChange("ru", true)}
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "ru" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             RU
                         </button>
                         <button
-                            onClick={() => handleLanguageChange("kg", true)} // Передаем true, так как это мобильная смена
+                            onClick={() => handleLanguageChange("kg", true)}
                             className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "kg" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
                         >
                             KG
