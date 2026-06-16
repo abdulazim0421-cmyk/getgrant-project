@@ -1,40 +1,42 @@
+"use client";
 import Link from "next/link";
+import { useLanguage } from "@/app/context/LanguageContext";
 
 import {
     Phone,
     Mail,
     MapPin,
-
 } from "lucide-react";
 
 export default function Footer() {
+    const { t } = useLanguage(); // Локализация функциясы
     const currentYear = new Date().getFullYear();
 
     const sections = [
         {
-            title: "Образование",
+            title: t("footer.sec.education"),
             links: [
-                { label: "Университеты", href: "/Universities" },
-                { label: "Страны", href: "/Countries" },
-                { label: "Программы", href: "/Programs" },
-                { label: "Онлайн-подготовка", href: "/OnlinePrep" },
+                { label: t("footer.link.universities"), href: "/Universities" },
+                { label: t("footer.link.countries"), href: "/Countries" },
+                { label: t("footer.link.programs"), href: "/Programs" },
+                { label: t("footer.link.online"), href: "/OnlinePrep" },
             ],
         },
         {
-            title: "Компания",
+            title: t("footer.sec.company"),
             links: [
-                { label: "О нас", href: "/About" },
-                { label: "Наша команда", href: "/" },
-                { label: "Партнёры", href: "/" },
+                { label: t("footer.link.about"), href: "/About" },
+                { label: t("footer.link.team"), href: "/" },
+                { label: t("footer.link.partners"), href: "/" },
             ],
         },
         {
-            title: "Поддержка",
+            title: t("footer.sec.support"),
             links: [
-                { label: "FAQ", href: "/" },
-                { label: "Контакты", href: "/" },
-                { label: "Блог", href: "/" },
-                { label: "Документы", href: "/" },
+                { label: t("footer.link.faq"), href: "/" },
+                { label: t("footer.link.contacts"), href: "/" },
+                { label: t("footer.link.blog"), href: "/" },
+                { label: t("footer.link.docs"), href: "/" },
             ],
         },
     ];
@@ -91,7 +93,7 @@ export default function Footer() {
                         </Link>
 
                         <p className="max-w-xs text-[15px] leading-relaxed">
-                            Онлайн-сервис для подготовки и сопровождения поступления студентов 9–11 классов за рубеж.
+                            {t("footer.desc")}
                         </p>
 
                         <div className="space-y-4 pt-4">
@@ -106,7 +108,7 @@ export default function Footer() {
                             <div className="flex items-center gap-3">
                                 <MapPin size={18} className="text-gray-500" />
                                 <span className="text-sm font-medium leading-tight">
-                                    Бишкек, ул. Касыма Тыныстанова, 197/1
+                                    {t("footer.address")}
                                 </span>
                             </div>
                         </div>
@@ -144,18 +146,18 @@ export default function Footer() {
 
                 <div className="border-t border-gray-800/50 pt-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
                     <p className="text-sm">
-                        © {currentYear} GetGrant. Все права защищены.
+                        © {currentYear} GetGrant. {t("footer.copyright")}
                     </p>
 
                     <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
-                        <Link href="/privacy" className="hover:text-white transition-colors">Политика конфиденциальности</Link>
-                        <Link href="/terms" className="hover:text-white transition-colors">Условия использования</Link>
-                        <Link href="/license" className="hover:text-white transition-colors">Лицензии</Link>
+                        <Link href="/privacy" className="hover:text-white transition-colors">{t("footer.privacy")}</Link>
+                        <Link href="/terms" className="hover:text-white transition-colors">{t("footer.terms")}</Link>
+                        <Link href="/license" className="hover:text-white transition-colors">{t("footer.licenses")}</Link>
                     </div>
                 </div>
 
                 <div className="mt-8 text-[11px] text-gray-600 leading-relaxed max-w-4xl italic">
-                    Лицензия на образовательную деятельность № 240000733 от 01.01.2020 | Свидетельство об аккредитации № 654321 от 15.03.2021
+                    {t("footer.license.text")}
                 </div>
             </div>
         </footer>
