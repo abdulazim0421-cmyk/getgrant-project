@@ -15,7 +15,8 @@ export default function CountryCta({ ctaTitle }: CountryCtaProps) {
 
     return (
         <section className="py-10 sm:py-16">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Ограничение ширины изменено на max-w-[1440px] */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-[#F9FAFB] rounded-[24px] border border-[#EAECF0] py-10 px-5 sm:py-14 sm:px-8 flex flex-col items-center text-center gap-5 shadow-sm">
                     <h2 className="text-xl sm:text-2xl font-bold text-[#101828] max-w-xl tracking-tight">{ctaTitle}</h2>
                     <p className="text-xs sm:text-sm text-[#667085] max-w-md leading-relaxed">

@@ -55,7 +55,7 @@ function CourseCard({ course }: { course: typeof courses[0] }) {
 export default function CoursesSection() {
     const { t } = useLanguage();
     return (
-        <section className="mb-10 md:mb-14 px-4 sm:px-6 lg:px-8">
+        <section className="mb-10 md:mb-14 px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#101828] mb-5">{t("online.courses.title")}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
                 {courses.map((c) => <CourseCard key={c.id} course={c} />)}

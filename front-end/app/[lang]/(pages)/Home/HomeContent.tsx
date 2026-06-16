@@ -3,7 +3,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
 
-// ДИНАМИЧЕСКИЙ ИМПОРТ ПРОГРАММ (Обновлено)
 const PopularPrograms = dynamic(
     () => import("./HomeContent/PopularPrograms").then((mod) => mod.PopularProgramsRaw),
     {
@@ -12,7 +11,6 @@ const PopularPrograms = dynamic(
     }
 );
 
-// Динамический импорт слайдера стран
 const PopularCountries = dynamic(
     () => import("./HomeContent/PopularCountries").then((mod) => mod.PopularCountriesRaw),
     {
@@ -21,7 +19,6 @@ const PopularCountries = dynamic(
     }
 );
 
-// Динамический импорт слайдера университетов
 const PartnerUniversities = dynamic(
     () => import("./HomeContent/PartnerUniversities").then((mod) => mod.PartnerUniversitiesRaw),
     {

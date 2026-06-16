@@ -32,7 +32,8 @@ export default function GetGrantExamGrid() {
     const { t } = useLanguage();
 
     return (
-        <section className="w-full max-w-7xl mx-auto px-4 py-8">
+        // Изменен класс ширины с max-w-7xl на max-w-[1440px]
+        <section className="w-full max-w-[1440px] mx-auto px-4 py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
                 {/* БОЛЬШАЯ КАРТОЧКА: TOEFL / IELTS */}

@@ -46,7 +46,7 @@ export default function CountryUniversities({ universities }: CountryUniversitie
 
     return (
         <section className="py-10 sm:py-16">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
                     <h2 className="text-xl sm:text-2xl font-bold text-[#101828] tracking-tight">{t("country.universities")}</h2>
                     <a href="/Universities" className="inline-flex justify-center items-center px-5 py-2.5 rounded-xl bg-[#1570EF] text-white text-xs sm:text-sm font-semibold hover:bg-[#1D4ED8] transition-colors active:scale-98">

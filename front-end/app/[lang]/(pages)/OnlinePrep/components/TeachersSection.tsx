@@ -25,7 +25,8 @@ export default function TeachersSection() {
     const { t } = useLanguage();
 
     return (
-        <section className="mb-10 md:mb-14 overflow-hidden">
+        // Добавлены классы max-w-[1440px] и mx-auto для ограничения максимальной ширины и центрирования
+        <section className="mb-10 md:mb-14 overflow-hidden max-w-[1440px] mx-auto">
             <div className="w-full px-4 sm:px-6 lg:px-12">
                 <SectionHeader
                     title={t("online.teachers.title")}

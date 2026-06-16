@@ -19,7 +19,8 @@ export default function AboutStats({ strapiStats }: AboutStatsProps) {
 
     return (
         <section className="bg-slate-900 py-10 sm:py-14">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            {/* Контейнер изменен на max-w-[1440px] px-4 sm:px-6 lg:px-8 */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
                     {stats.map((s, i) => (
                         <div key={i} className="flex flex-col items-center text-center gap-2 sm:gap-3">

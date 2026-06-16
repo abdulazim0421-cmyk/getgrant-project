@@ -36,7 +36,8 @@ export default function AboutHistory() {
 
     return (
         <section className="py-12 sm:py-16 md:py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            {/* Контейнер изменен на max-w-[1440px] px-4 sm:px-6 lg:px-8 */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-8 md:mb-12 tracking-tight">
                     {t("about.history.title")}
                 </h2>

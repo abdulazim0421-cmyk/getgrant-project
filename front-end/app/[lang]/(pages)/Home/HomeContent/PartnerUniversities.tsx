@@ -72,7 +72,8 @@ export function PartnerUniversitiesRaw({ partnerUniversities = [] }: PartnerUniv
     }
 
     return (
-        <section className="py-12">
+        // Добавлены классы max-w-[1440px] и mx-auto для центрирования и ограничения ширины
+        <section className="py-12 max-w-[1440px] mx-auto">
             <div className="container mx-auto px-6 lg:px-12">
                 <SectionHeader
                     title={t("section.universities")}

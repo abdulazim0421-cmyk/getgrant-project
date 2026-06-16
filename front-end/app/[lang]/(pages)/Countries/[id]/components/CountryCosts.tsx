@@ -13,12 +13,12 @@ export default function CountryCosts({ costRows, costTotal }: CountryCostsProps)
 
     return (
         <section className="py-10 sm:py-16 bg-white">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Ограничение ширины изменено на max-w-[1440px] */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#101828] mb-5 sm:mb-8 tracking-tight">
                     {t("country.costs")}
                 </h2>
 
-                {/* overflow-x-auto спасает таблицу на смартфонах */}
                 <div className="w-full overflow-x-auto rounded-2xl border border-[#EAECF0] shadow-sm bg-white">
                     <table className="w-full text-sm text-left border-collapse min-w-[540px]">
                         <thead>

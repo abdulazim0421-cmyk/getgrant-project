@@ -40,7 +40,8 @@ export default function CatalogLayout({ initialUniversities = [] }: { initialUni
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-24 md:pb-10">
+        // Класс max-w-7xl заменен на max-w-[1440px] для ограничения ширины каталога
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-24 md:pb-10">
             <div className="mb-6 flex flex-col gap-1">
                 <h1 className="text-xl md:text-2xl font-bold text-[#1D2939]">
                     {t("catalog.title") === "catalog.title" ? "Каталог университетов" : (t("catalog.title") || "Каталог университетов")}

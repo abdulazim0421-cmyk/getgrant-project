@@ -19,7 +19,8 @@ export default function AboutLicenses() {
 
     return (
         <section className="py-12 sm:py-16 md:py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            {/* Контейнер изменен на max-w-[1440px] px-4 sm:px-6 lg:px-8 */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">{t("about.licenses.title")}</h2>
                 <p className="mt-1 text-xs sm:text-sm text-slate-500 mb-8 md:mb-10">{t("about.licenses.subtitle")}</p>
 

@@ -84,7 +84,8 @@ export function PopularProgramsRaw({ majors = [] }: PopularProgramsProps) {
     }
 
     return (
-        <section className="py-12">
+        // Добавлены классы max-w-[1440px] и mx-auto для ограничения ширины и центрирования
+        <section className="py-12 max-w-[1440px] mx-auto">
             <div className="container mx-auto px-6 lg:px-12">
                 <SectionHeader
                     title={t("section.programs")}

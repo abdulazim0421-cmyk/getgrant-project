@@ -12,13 +12,12 @@ export interface Teacher {
 
 export default function TeacherCard({ teacher }: { teacher: Teacher }) {
 
-    // Генерируем специальное событие для модалки преподавателя
     const handleEnrollClick = () => {
         window.dispatchEvent(new CustomEvent("open-teacher-modal", { detail: teacher }));
     };
 
     return (
-        <div className="w-full bg-white rounded-2xl border border-[#EAECF0] p-5 flex flex-col gap-4 shadow-sm h-full select-none">
+        <div className="w-full max-w-[1440px] mx-auto bg-white rounded-2xl border border-[#EAECF0] p-5 flex flex-col gap-4 shadow-sm h-full select-none">
             {/* Аватар + информация */}
             <div className="flex items-start gap-3 w-full">
                 <img
@@ -33,7 +32,6 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
                 </div>
             </div>
 
-            {/* Характеристики (Стоимость, Опыт, Сертификаты) */}
             <div className="flex flex-col gap-2 w-full text-xs sm:text-[13px] mt-auto border-t border-gray-50 pt-3">
                 <div className="flex justify-between items-center gap-2 w-full">
                     <span className="text-gray-400 shrink-0">Стоимость</span>
@@ -51,7 +49,6 @@ export default function TeacherCard({ teacher }: { teacher: Teacher }) {
                 </div>
             </div>
 
-            {/* Кнопка действия */}
             <button
                 onClick={handleEnrollClick}
                 className="w-full py-2.5 rounded-xl border border-[#0047FF] text-[#0047FF] text-xs font-semibold hover:bg-[#0047FF] hover:text-white transition-all active:scale-98 mt-1"

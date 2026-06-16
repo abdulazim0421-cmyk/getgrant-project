@@ -65,7 +65,8 @@ export default function WhyGetGrant() {
     ];
 
     return (
-        <section className="max-w-[1280px] mx-auto px-4 py-12 md:py-20 font-sans antialiased">
+        // Изменено ограничение ширины с max-w-[1280px] на max-w-[1440px]
+        <section className="max-w-[1440px] mx-auto px-4 py-12 md:py-20 font-sans antialiased">
             <div className="flex flex-col items-center text-center mb-10 md:mb-14 px-4">
                 <h2 className="text-[28px] sm:text-[34px] md:text-[38px] font-extrabold mb-3 text-[#1D2939] tracking-tight leading-[1.2]">
                     {t("bento.title")}

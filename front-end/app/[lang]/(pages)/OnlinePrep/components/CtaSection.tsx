@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/app/context/LanguageContext";
 
-// Добавь эту функцию обратно:
+
 function openModal() {
     window.dispatchEvent(new CustomEvent("open-consultation-modal"));
 }
@@ -10,7 +10,7 @@ function openModal() {
 export default function CtaSection() {
     const { t } = useLanguage();
     return (
-        <section className="bg-[#F0F5FF] py-10 md:py-14 px-4 sm:px-6 rounded-2xl mx-4 sm:mx-6 lg:mx-8 shadow-sm">
+        <section className="bg-[#F0F5FF] py-10 md:py-14 px-4 sm:px-6 rounded-2xl mx-4 sm:mx-6 lg:mx-auto max-w-[1440px] shadow-sm">
             <div className="container mx-auto flex flex-col items-center text-center gap-3.5">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#101828] px-2">
                     {t("online.cta.title")}

@@ -11,7 +11,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 interface Advantage {
-    icon: any; // Поддерживает и строки, и уже срендеренные элементы из Strapi-маппинга
+    icon: any;
     title: string;
     desc: string;
 }
@@ -21,7 +21,8 @@ export default function CountryAdvantages({ advantages }: { advantages: Advantag
 
     return (
         <section className="py-10 sm:py-16">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Ограничение ширины изменено на max-w-[1440px] */}
+            <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#101828] mb-6 sm:mb-8 tracking-tight">
                     {t("country.advantages")}
                 </h2>
