@@ -5,12 +5,18 @@ import GetGrantExamGrid from "./GetGrantExamGrid";
 import BentoGrid from "@/app/[lang]/(pages)/Home/BentoGrid";
 import Footer from "@/app/components/Footer";
 
-async function fetchStrapiData(endpoint: string) {
+const langToLocale: Record<string, string> = {
+    ru: "ru",
+    kg: "ky",
+};
+
+async function fetchStrapiData(endpoint: string, locale: string) {
     const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://127.0.0.1:1337";
     try {
-        const res = await fetch(`${strapiUrl}/api/${endpoint}?populate=*`, {
-            next: { revalidate: 60 },
-        });
+        const res = await fetch(
+            `${strapiUrl}/api/${endpoint}?populate=*&locale=${locale}`,
+            { next: { revalidate: 60 } }
+        );
 
         if (!res.ok) {
             console.error(`Strapi error [${endpoint}]: ${res.status}`);
@@ -25,11 +31,14 @@ async function fetchStrapiData(endpoint: string) {
     }
 }
 
-export default async function Home() {
+export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
+    const { lang } = await params;
+    const locale = langToLocale[lang] || "ru";
+
     const [countries, majors, partnerUniversities] = await Promise.all([
-        fetchStrapiData("countries-homes"),
-        fetchStrapiData("programs-homes"),
-        fetchStrapiData("university-homes"),
+        fetchStrapiData("countries-homes", locale),
+        fetchStrapiData("programs-homes", locale),
+        fetchStrapiData("university-homes", locale),
     ]);
 
     return (
