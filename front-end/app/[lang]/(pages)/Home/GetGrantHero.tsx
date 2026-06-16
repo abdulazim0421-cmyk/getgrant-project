@@ -19,7 +19,6 @@ export default function GetGrantHero() {
     ];
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для ограничения максимальной ширины
         <section className="relative w-full max-w-[1440px] mx-auto min-h-screen py-10 md:py-14 bg-white text-gray-900 overflow-hidden flex items-center">
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_40%_at_50%_60%,#eef2ff_0%,#fff_100%)]" />
 
@@ -35,7 +34,7 @@ export default function GetGrantHero() {
                         </div>
 
                         <div className="space-y-4">
-                            <h1 className="text-[40px] sm:text-[70px] md:text-[82px] uppercase font-semibold leading-[1.2] text-gray-950">
+                            <h1 className="text-[40px] sm:text-[60px] md:text-[70px] uppercase font-semibold leading-[1.2] text-gray-950">
                                 {t("hero.title1")} <br />
                                 <span className="text-blue-600">
                                     {t("hero.title2")} <br />
