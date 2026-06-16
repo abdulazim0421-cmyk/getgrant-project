@@ -91,12 +91,15 @@ export default async function CountryContent({ id }: { id: string }) {
         <div className="min-h-screen bg-white flex flex-col">
             <Header />
             <main className="flex-grow pt-20 sm:pt-24 pb-16">
-                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
+                <div className="w-full max-w-[1425px] mx-auto px-4 lg:px-6 mb-4 sm:mb-6">
                     <Link
                         href="/Countries"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-3.5 sm:py-2 rounded-xl border border-[#EAECF0] bg-white text-xs sm:text-sm font-semibold text-[#344054] shadow-sm hover:bg-[#F9FAFB] hover:text-[#101828] transition-all duration-200 group active:scale-98"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-3.5 sm:py-2 rounded-xl border border-[#EAECF0] bg-white text-xs sm:text-sm font-semibold text-[#344054] shadow-sm transition-all duration-200 group active:scale-98 hover:border-blue-200 hover:bg-blue-50/40 hover:text-blue-600"
                     >
-                        <ArrowLeft size={16} className="text-[#667085] transition-transform duration-200 group-hover:-translate-x-0.5" />
+                        <ArrowLeft
+                            size={16}
+                            className="text-[#667085] transition-transform duration-200 group-hover:-translate-x-1 group-hover:text-blue-600"
+                        />
                         <span>Назад к странам</span>
                     </Link>
                 </div>
