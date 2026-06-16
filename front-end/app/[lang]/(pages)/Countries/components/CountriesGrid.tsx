@@ -3,10 +3,15 @@ import { type Country } from "./CountryCard";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-async function getCountries(): Promise<Country[]> {
+const langToLocale: Record<string, string> = {
+    ru: "ru",
+    kg: "ky",
+};
+
+async function getCountries(locale: string): Promise<Country[]> {
     try {
         const res = await fetch(
-            `${STRAPI_URL}/api/country-cards?populate[flag]=true&populate[cardImage]=true`,
+            `${STRAPI_URL}/api/country-cards?populate[flag]=true&populate[cardImage]=true&locale=${locale}`,
             { next: { revalidate: 60 } }
         );
 
@@ -16,18 +21,15 @@ async function getCountries(): Promise<Country[]> {
         }
 
         const data = await res.json();
-
         if (!data || !data.data) return [];
 
         return data.data.map((item: any) => {
-            console.log("item:", JSON.stringify(item, null, 2));
-
             const flagUrl = item.flag?.url;
             const cardImageUrl = item.cardImage?.url;
 
             return {
                 id: item.id,
-                name: item.nameRu,
+                name: locale === "ky" ? (item.nameKg || item.nameRu) : item.nameRu,
                 nameEn: item.nameEn,
                 flag: "",
                 flagImage: flagUrl
@@ -46,7 +48,8 @@ async function getCountries(): Promise<Country[]> {
     }
 }
 
-export default async function CountriesGrid() {
-    const countries = await getCountries();
+export default async function CountriesGrid({ lang = "ru" }: { lang?: string }) {
+    const locale = langToLocale[lang] || "ru";
+    const countries = await getCountries(locale);
     return <CountriesGridClient countries={countries} />;
 }
