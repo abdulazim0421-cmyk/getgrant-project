@@ -9,7 +9,6 @@ export default function AboutHero() {
 
     return (
         <section className="bg-white py-12 sm:py-16 md:py-20 lg:py-24 border-b border-[#EAECF0]">
-            {/* Контейнер изменен на max-w-[1440px] px-4 sm:px-6 lg:px-8 */}
             <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <p className="text-xs sm:text-sm font-semibold tracking-wide text-gray-400 uppercase mb-3">
                     {t("about.label")}

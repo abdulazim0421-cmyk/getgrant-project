@@ -30,7 +30,6 @@ function ProgramCard({ program }: { program: any }) {
             : `${STRAPI_URL}${imageObj.url}`;
     }
 
-    // В Strapi у вас массив careerPaths вместо строки tags
     const tagsArray = Array.isArray(attr.careerPaths)
         ? attr.careerPaths
         : [];
@@ -61,11 +60,9 @@ function ProgramCard({ program }: { program: any }) {
                     ))}
                 </div>
             )}
-            {/* Меняем attr.title на attr.name */}
             <p className="text-sm font-bold text-gray-900 leading-tight min-h-[40px] line-clamp-2">{attr.name || "Название программы"}</p>
             <div className="flex items-center gap-3 text-xs mt-auto">
                 <span className="flex items-center gap-1 text-slate-900"><Clock size={12} className="text-blue-600" />{attr.duration || "—"}</span>
-                {/* Меняем attr.salary на attr.averageSalary */}
                 <span className="flex items-center gap-1 font-bold text-slate-900"><TrendingUp size={12} className="text-blue-600" />{attr.averageSalary || "—"}</span>
             </div>
         </Link>
@@ -84,7 +81,6 @@ export function PopularProgramsRaw({ majors = [] }: PopularProgramsProps) {
     }
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для ограничения ширины и центрирования
         <section className="py-12 max-w-[1440px] mx-auto">
             <div className="container mx-auto px-6 lg:px-12">
                 <SectionHeader

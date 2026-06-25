@@ -211,7 +211,6 @@ export default function CourseModal() {
                                 </div>
                             </div>
 
-                            {/* Чекбокс оферты со сборкой строки под правила языка */}
                             <label className="flex items-start gap-3 cursor-pointer select-none py-1">
                                 <div className="relative flex items-center justify-center flex-shrink-0 mt-0.5">
                                     <input

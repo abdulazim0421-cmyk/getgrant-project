@@ -98,7 +98,6 @@ export default function GetGrantHero() {
                                     <GraduationCap className="w-5 h-5 md:w-7 md:h-7 stroke-[2.2]" />
                                 </div>
 
-                                {/* Текстовый блок подстраивает шрифты */}
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-base md:text-xl font-bold text-[#101828] leading-tight tracking-tight">
                                         {t("hero.manager")}

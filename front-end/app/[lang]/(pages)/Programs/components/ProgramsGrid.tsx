@@ -26,14 +26,12 @@ export default function ProgramsGrid({ programs, total, onShowMore, onCollapse, 
 
     return (
         <div className="flex-1 w-full flex flex-col gap-6 md:gap-8">
-            {/* Адаптивная сетка: 1 колонка на смартфонах, 2 на планшетах и десктопах */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6">
                 {programs.map((program) => (
                     <ProgramCard key={program.id} program={program} />
                 ))}
             </div>
 
-            {/* Элементы управления внизу страницы */}
             <div className="flex flex-col items-center gap-4 pt-4 pb-4">
                 <div className="w-full max-w-xs bg-gray-100 rounded-full h-1 overflow-hidden">
                     <div

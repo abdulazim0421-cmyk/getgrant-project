@@ -32,11 +32,9 @@ export default function GetGrantExamGrid() {
     const { t } = useLanguage();
 
     return (
-        // Изменен класс ширины с max-w-7xl на max-w-[1440px]
         <section className="w-full max-w-[1440px] mx-auto px-4 py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
 
-                {/* БОЛЬШАЯ КАРТОЧКА: TOEFL / IELTS */}
                 <div className="lg:col-span-2 relative overflow-hidden rounded-[32px] bg-[linear-gradient(98deg,#3068E3_0%,#B0CAFC_100%)] text-white p-8 md:p-10 flex flex-col justify-between min-h-[400px] transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-xl group">
                     <div className="relative z-10 max-w-[260px]">
                         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">
@@ -68,7 +66,6 @@ export default function GetGrantExamGrid() {
                     </div>
                 </div>
 
-                {/* СЕТКА МАЛЕНЬКИХ КАРТОЧЕК */}
                 <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <ExamTile
                         title="SAT / ACT"

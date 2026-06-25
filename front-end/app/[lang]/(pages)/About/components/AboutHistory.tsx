@@ -36,13 +36,11 @@ export default function AboutHistory() {
 
     return (
         <section className="py-12 sm:py-16 md:py-20 bg-white">
-            {/* Контейнер изменен на max-w-[1440px] px-4 sm:px-6 lg:px-8 */}
             <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-8 md:mb-12 tracking-tight">
                     {t("about.history.title")}
                 </h2>
 
-                {/* Десктопная версия (Таймлайн по центру) */}
                 <div className="hidden md:block relative">
                     <div className="absolute left-1/2 top-0 bottom-0 w-px bg-blue-200 -translate-x-1/2" />
                     <div className="flex flex-col gap-6">
@@ -60,7 +58,6 @@ export default function AboutHistory() {
                     </div>
                 </div>
 
-                {/* Мобильная версия (Чистый аккуратный стек) */}
                 <div className="flex flex-col gap-4 md:hidden border-l-2 border-blue-100 pl-4 ml-2">
                     {events.map((e) => (
                         <div key={e.year} className="relative">

@@ -17,60 +17,49 @@ export default function ProgramCard({ program }: ProgramCardProps) {
 
     if (!program) return null;
 
-    // Безопасное извлечение текстовых и числовых полей
     const name = program.name || "Без названия";
     const duration = typeof program.duration === "number" ? program.duration : 4;
     const universitiesCount = typeof program.universitiesCount === "number" ? program.universitiesCount : 0;
     const averageSalary = typeof program.averageSalary === "number" ? program.averageSalary : 0;
 
-    // Исправленный парсинг карьерных треков для строк и массивов Strapi v5
     const careerPaths = useMemo(() => {
         if (Array.isArray(program.careerPaths)) return program.careerPaths;
         if (typeof program.careerPaths === "string") {
-            // Если строка оформлена как JSON-массив, парсим её
             if (program.careerPaths.startsWith("[")) {
                 try { return JSON.parse(program.careerPaths); } catch { return []; }
             }
-            // Если обычная строка через запятую: "Разработчик, Аналитик"
             return program.careerPaths.split(",").map((p: string) => p.trim()).filter(Boolean);
         }
         return [];
     }, [program.careerPaths]);
 
-    // Абсолютно безопасный парсинг картинок для Strapi v5 (строки, массивы, объекты)
     const finalImageUrl = useMemo(() => {
         if (!program.image) return null;
 
         let path = "";
 
-        // 1. Если пришла готовая строка
         if (typeof program.image === "string") {
             path = program.image;
         }
-        // 2. Если пришел массив картинок (берем первую)
         else if (Array.isArray(program.image)) {
             const firstImg = program.image[0];
             path = firstImg?.url || firstImg?.attributes?.url || "";
         }
-        // 3. Если пришел одиночный объект картинки
         else if (typeof program.image === "object") {
             path = program.image.url || program.image.data?.attributes?.url || "";
         }
 
         if (!path || typeof path !== "string" || path.trim() === "") return null;
 
-        // Если путь уже содержит домен, отдаем его, иначе склеиваем со strapiUrl
         return path.startsWith("http") ? path : `${strapiUrl}${path}`;
     }, [program.image, strapiUrl]);
 
     const visiblePaths = careerPaths.slice(0, VISIBLE_TAGS);
     const hiddenCount = careerPaths.length - VISIBLE_TAGS;
 
-    // Метод для безопасного перевода с русскими фолбеками, если ключей нет в JSON
     const getTranslation = (key: string, fallback: string) => {
         if (!t) return fallback;
         const translated = t(key);
-        // Если i18n вернул сам ключ (значит перевода нет), отдаем дефолтный русский текст
         return translated === key ? fallback : translated;
     };
 
@@ -93,9 +82,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
     };
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для ограничения максимальной ширины
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-md h-full max-w-[1440px] mx-auto">
-            {/* Блок картинки */}
             <div className="relative h-44 sm:h-48 w-full bg-slate-50 overflow-hidden shrink-0">
                 {finalImageUrl ? (
                     <Image
@@ -117,7 +104,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
                 </div>
             </div>
 
-            {/* Контент */}
             <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1 justify-between">
                 <div className="flex flex-col gap-2.5">
                     <h3 className="font-bold text-gray-900 text-sm sm:text-base leading-snug min-h-[40px] sm:min-h-[44px] line-clamp-2 group-hover:text-blue-600 transition-colors">
@@ -136,7 +122,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
                     </div>
                 </div>
 
-                {/* Зарплата */}
                 <div className="bg-gray-50/70 rounded-xl p-3.5 border border-gray-50 mt-1">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">
                         {getTranslation("programCard.averageSalary", "Средняя зарплата")}
@@ -149,7 +134,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
                     </p>
                 </div>
 
-                {/* Теги карьерного пути */}
                 {visiblePaths.length > 0 && (
                     <div className="mt-1">
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">

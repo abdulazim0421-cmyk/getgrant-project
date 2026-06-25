@@ -37,7 +37,6 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                 </p>
             )}
 
-            {/* Поиск */}
             <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">{t("programs.filter.search")}</p>
                 <div className="relative">
@@ -52,7 +51,6 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                 </div>
             </div>
 
-            {/* Направления */}
             <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("programs.filter.direction")}</p>
                 <div className="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1">
@@ -70,7 +68,6 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                 </div>
             </div>
 
-            {/* Уровни обучения */}
             <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("programs.filter.level")}</p>
                 <div className="flex flex-col gap-2.5">
@@ -88,7 +85,6 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                 </div>
             </div>
 
-            {/* Кнопки действий с защитой i18n */}
             <div className="flex flex-col gap-2 mt-2 shrink-0">
                 {isMobile && onClose && (
                     <button

@@ -46,7 +46,6 @@ function UniversityCard({ university }: { university: any }) {
                     <span className="flex items-center gap-1"><BookOpen size={13} className="text-[#1570EF]" />{attr.programsCount || "0"}</span>
                     <span className="flex items-center gap-1"><Users size={13} className="text-[#1570EF]" />{attr.studentsCount || "0"}</span>
                 </div>
-                {/* Меняем attr.location на attr.city */}
                 {attr.city && (
                     <div className="flex items-center gap-1 text-xs text-[#1D2939]">
                         <MapPin size={12} className="text-[#1D2939] flex-shrink-0" />
@@ -72,7 +71,6 @@ export function PartnerUniversitiesRaw({ partnerUniversities = [] }: PartnerUniv
     }
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для центрирования и ограничения ширины
         <section className="py-12 max-w-[1440px] mx-auto">
             <div className="container mx-auto px-6 lg:px-12">
                 <SectionHeader

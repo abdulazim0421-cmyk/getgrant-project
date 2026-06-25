@@ -25,16 +25,13 @@ export default function UniversityGrid({ universities, total, onShowMore, onColl
 
     return (
         <div className="flex-1 w-full flex flex-col gap-6 md:gap-8">
-            {/* Сетка: 1 колонка на мобилках, 2 на планшетах (md), 2 на десктопе (xl) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6">
                 {universities.map((uni) => (
                     <UniversityCard key={uni.id} university={uni} />
                 ))}
             </div>
 
-            {/* Элементы управления, пагинация и прогресс-бар */}
             <div className="flex flex-col items-center gap-4 pt-4 pb-4">
-                {/* Кастомный трек прогресс-бара */}
                 <div className="w-full max-w-xs bg-gray-100 rounded-full h-1 overflow-hidden">
                     <div
                         className="bg-blue-600 h-1 rounded-full transition-all duration-500 ease-out"
@@ -50,7 +47,6 @@ export default function UniversityGrid({ universities, total, onShowMore, onColl
                             {t("universities.shown")} <span className="font-semibold text-gray-600">{universities.length}</span> {t("universities.of")} <span className="font-semibold text-gray-600">{total}</span> {t("universities.found2")}
                         </p>
 
-                        {/* Адаптивные кнопки: на мобилках растягиваются во всю ширину */}
                         <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto justify-center">
                             {hasMore && (
                                 <button

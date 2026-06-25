@@ -17,7 +17,6 @@ interface PopularCountriesProps {
 export function CountryCard({ country }: { country: any }) {
     if (!country) return null;
 
-    // В Strapi v5 работаем напрямую с объектом country без прослойки .attributes
     const attr = country;
     const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -39,7 +38,6 @@ export function CountryCard({ country }: { country: any }) {
             : `${STRAPI_URL}${flagObj.url}`;
     }
 
-    // Безопасный парсинг массива преимуществ (benefits)
     let benefits: string[] = [];
     if (attr.benefits) {
         if (Array.isArray(attr.benefits)) {
@@ -92,7 +90,6 @@ export function CountryCard({ country }: { country: any }) {
     );
 }
 
-// Экспортируем дефолтную обертку слайдера для главной страницы
 export default function PopularCountries({ countries = [] }: PopularCountriesProps) {
     return <PopularCountriesRaw countries={countries} />;
 }
@@ -106,7 +103,6 @@ export function PopularCountriesRaw({ countries = [] }: PopularCountriesProps) {
     }
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для центрирования и ограничения максимальной ширины
         <section className="py-12 max-w-[1440px] mx-auto">
             <div className="container mx-auto px-6 lg:px-12">
                 <SectionHeader

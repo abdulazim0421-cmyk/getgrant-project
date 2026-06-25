@@ -70,7 +70,6 @@ export default function ProgramsCatalogLayout({ initialPrograms = [] }: { initia
                     />
                 </div>
 
-                {/* Мобильная шторка фильтров (выезжает плавно) */}
                 <div className={`fixed inset-0 z-50 transition-opacity duration-300 xl:hidden ${isMobileFilterOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)} />
                     <div className={`absolute bottom-0 left-0 right-0 top-10 sm:left-auto sm:w-[400px] bg-white rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none flex flex-col shadow-2xl transition-transform duration-300 ease-out transform ${isMobileFilterOpen ? "translate-y-0 sm:translate-x-0" : "translate-y-full sm:translate-x-full"}`}>
@@ -94,7 +93,6 @@ export default function ProgramsCatalogLayout({ initialPrograms = [] }: { initia
                     </div>
                 </div>
 
-                {/* Сетка результатов */}
                 <ProgramsGrid
                     programs={visible}
                     total={filtered.length}
@@ -105,7 +103,6 @@ export default function ProgramsCatalogLayout({ initialPrograms = [] }: { initia
                 />
             </div>
 
-            {/* Фиксированная плашка снизу экрана для мобилок и планшетов */}
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-t border-gray-100 p-4 flex gap-3 xl:hidden shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
                 <button
                     onClick={() => setIsMobileFilterOpen(true)}
