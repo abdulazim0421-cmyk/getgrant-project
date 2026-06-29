@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_course_course_groups",
+  "info": {
+    "displayName": "CourseGroup"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

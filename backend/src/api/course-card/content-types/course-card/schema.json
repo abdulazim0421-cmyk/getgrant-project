@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "course_cards",
+  "info": {
+    "singularName": "course-card",
+    "pluralName": "course-cards",
+    "displayName": "CourseCard"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "durationWeeks": {
+      "type": "integer"
+    },
+    "lessonsCount": {
+      "type": "integer"
+    },
+    "studentsCount": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "integer"
+    },
+    "discountPercent": {
+      "type": "integer"
+    },
+    "format": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "course_groups": {
+      "type": "component",
+      "component": "course.course-group",
+      "repeatable": true
+    }
+  }
+}

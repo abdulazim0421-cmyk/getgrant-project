@@ -12,7 +12,6 @@ export default function UniversityCard({ university }: { university: any }) {
 
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-md h-full">
-            {/* Картинка / Превью */}
             <div className="relative h-44 sm:h-48 w-full bg-slate-50 overflow-hidden shrink-0">
                 {university.image && university.image.trim() !== "" ? (
                     <Image
@@ -33,14 +32,12 @@ export default function UniversityCard({ university }: { university: any }) {
                 </div>
             </div>
 
-            {/* Контент карточки */}
             <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1 justify-between">
                 <div className="flex flex-col gap-2.5">
                     <h3 className="font-bold text-gray-900 text-sm sm:text-base leading-snug min-h-[40px] sm:min-h-[44px] line-clamp-2 group-hover:text-blue-600 transition-colors">
                         {university.name}
                     </h3>
 
-                    {/* Метрики */}
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-500 font-medium">
                         <span className="flex items-center gap-1.5">
                             <BookOpen size={13} className="text-gray-400 shrink-0" />
@@ -52,7 +49,6 @@ export default function UniversityCard({ university }: { university: any }) {
                         </span>
                     </div>
 
-                    {/* Локация */}
                     {fullLocationString && (
                         <div className="flex items-center gap-1.5 text-xs text-gray-600 mt-0.5">
                             <MapPin size={13} className="text-gray-400 shrink-0" />
@@ -61,7 +57,6 @@ export default function UniversityCard({ university }: { university: any }) {
                     )}
                 </div>
 
-                {/* Сетка параметров (2х2) */}
                 <div className="bg-gray-50/70 rounded-xl p-3 grid grid-cols-2 gap-x-3 gap-y-2.5 mt-2 border border-gray-50">
                     <div>
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("uni.cost")}</p>

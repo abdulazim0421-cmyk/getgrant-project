@@ -25,7 +25,6 @@ export default function TeachersSection() {
     const { t } = useLanguage();
 
     return (
-        // Добавлены классы max-w-[1440px] и mx-auto для ограничения максимальной ширины и центрирования
         <section className="mb-10 md:mb-14 overflow-hidden max-w-[1440px] mx-auto">
             <div className="w-full px-4 sm:px-6 lg:px-12">
                 <SectionHeader
@@ -45,22 +44,18 @@ export default function TeachersSection() {
                     grabCursor={true}
                     className="!px-4 sm:!px-6 lg:!px-12 !pb-4"
                     breakpoints={{
-                        // На мобильных экранах (до 480px) показываем 1 полноценный слайд + кусочек второго
                         320: {
                             slidesPerView: 1.2,
                             spaceBetween: 16
                         },
-                        // На экранах побольше (480px - 768px)
                         480: {
                             slidesPerView: 1.6,
                             spaceBetween: 16
                         },
-                        // Планшеты (показываем 2 полных слайда)
                         768: {
                             slidesPerView: 2.3,
                             spaceBetween: 20
                         },
-                        // Ноутбуки и десктопы (фиксированная ширина слайдов возвращается)
                         1024: {
                             slidesPerView: 3,
                             spaceBetween: 20

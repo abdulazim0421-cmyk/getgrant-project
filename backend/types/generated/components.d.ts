@@ -41,12 +41,23 @@ export interface CountryCardVisaInfo extends Struct.ComponentSchema {
   };
 }
 
+export interface CourseCourseGroup extends Struct.ComponentSchema {
+  collectionName: 'components_course_course_groups';
+  info: {
+    displayName: 'CourseGroup';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'country-card.advantages': CountryCardAdvantages;
       'country-card.living-cost': CountryCardLivingCost;
       'country-card.visa-info': CountryCardVisaInfo;
+      'course.course-group': CourseCourseGroup;
     }
   }
 }

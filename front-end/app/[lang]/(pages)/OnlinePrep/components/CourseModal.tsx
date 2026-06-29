@@ -4,26 +4,16 @@ import { useEffect, useState } from "react";
 import { X, Calendar, Monitor, ChevronDown, Check } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
-
-interface CourseData {
-    id: number;
-    title: string;
-    description: string;
-    duration: string;
-    lessons: number;
-    students: number;
-    price: number;
-}
+import type { CourseData } from "./CourseCard";
 
 export default function CourseModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [course, setCourse] = useState<CourseData | null>(null);
 
-    const [selectedTime, setSelectedTime] = useState("");
+    const [selectedGroupId, setSelectedGroupId] = useState<string>("");
     const [englishLevel, setEnglishLevel] = useState("B1-B2");
     const [agreed, setAgreed] = useState(false);
 
-    // Исправлено: берем lang вместо locale в соответствии с твоим LanguageContext
     const { t, lang } = useLanguage();
 
     useEffect(() => {
@@ -40,7 +30,7 @@ export default function CourseModal() {
 
     const handleClose = () => {
         setIsOpen(false);
-        setSelectedTime("");
+        setSelectedGroupId("");
         setAgreed(false);
     };
 
@@ -61,8 +51,10 @@ export default function CourseModal() {
     if (!course) return null;
 
     const basePrice = course.price;
-    const discount = Math.round(basePrice * 0.1);
+    const discountPercent = course.discountPercent ?? 0;
+    const discount = Math.round(basePrice * (discountPercent / 100));
     const totalPrice = basePrice - discount;
+    const groups = course.groups ?? [];
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -70,9 +62,9 @@ export default function CourseModal() {
 
         console.log({
             courseId: course.id,
-            selectedTime,
+            selectedGroupId,
             englishLevel,
-            totalPrice
+            totalPrice,
         });
         handleClose();
     };
@@ -87,7 +79,6 @@ export default function CourseModal() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.15 }}
                 >
-                    {/* Фон-бэкдроп */}
                     <motion.div
                         className="absolute inset-0 bg-gray-950/40 backdrop-blur-sm fixed"
                         onClick={handleClose}
@@ -96,7 +87,6 @@ export default function CourseModal() {
                         exit={{ opacity: 0 }}
                     />
 
-                    {/* Контейнер модального окна */}
                     <motion.div
                         className="relative z-10 w-full max-w-[580px] bg-white rounded-[32px] shadow-2xl p-6 sm:p-10 flex flex-col gap-6 my-auto"
                         initial={{ opacity: 0, scale: 0.97, y: 10 }}
@@ -104,7 +94,6 @@ export default function CourseModal() {
                         exit={{ opacity: 0, scale: 0.97, y: 10 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
                     >
-                        {/* Хедер модалки */}
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex flex-col gap-1">
                                 <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
@@ -126,7 +115,6 @@ export default function CourseModal() {
                             </button>
                         </div>
 
-                        {/* Информационные плашки */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             <div className="flex items-center gap-3.5 p-3.5 bg-gray-50/60 rounded-2xl border border-gray-100/70">
                                 <div className="p-2.5 bg-white text-blue-600 rounded-xl shadow-sm border border-gray-100 shrink-0">
@@ -143,27 +131,27 @@ export default function CourseModal() {
                                 </div>
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-[11px] text-gray-400 font-bold uppercase tracking-wider">{t("modal.course.format")}</span>
-                                    <span className="text-sm font-bold text-blue-600 truncate mt-0.5">{t("modal.course.online")}</span>
+                                    <span className="text-sm font-bold text-blue-600 truncate mt-0.5">{course.format}</span>
                                 </div>
                             </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                            {/* Выбор времени */}
+                            {/* Выбор группы — теперь из Strapi */}
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-gray-900">{t("modal.course.time")}</label>
                                 <div className="relative">
                                     <select
                                         required
-
-                                        value={selectedTime}
-                                        onChange={(e) => setSelectedTime(e.target.value)}
-                                        className="w-full h-12 pl-4 pr-10 rounded-xl border border-gray-200 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition shadow-sm appearance-none cursor-pointer"
+                                        value={selectedGroupId}
+                                        onChange={(e) => setSelectedGroupId(e.target.value)}
+                                        className="w-full h-12 pl-4 pr-10 rounded-xl border border-gray-200 text-sm text-gray-900 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition shadow-sm appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={groups.length === 0}
                                     >
                                         <option value="" disabled hidden>{t("modal.course.time.placeholder")}</option>
-                                        <option value="morning">{t("modal.course.time.morning")}</option>
-                                        <option value="day">{t("modal.course.time.day")}</option>
-                                        <option value="evening">{t("modal.course.time.evening")}</option>
+                                        {groups.map((g) => (
+                                            <option key={g.id} value={String(g.id)}>{g.label}</option>
+                                        ))}
                                     </select>
                                     <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                                 </div>
@@ -194,16 +182,18 @@ export default function CourseModal() {
                                 </div>
                             </div>
 
-                            {/* Финансовый блок */}
+                            {/* Финансовый блок — скидка из Strapi */}
                             <div className="p-5 bg-gray-50/70 rounded-2xl border border-gray-100 flex flex-col gap-3 text-sm">
                                 <div className="flex justify-between items-center text-gray-400 font-medium">
                                     <span>{t("modal.course.price.base")}</span>
                                     <span className="font-bold text-gray-900">${basePrice}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-blue-600 font-semibold">
-                                    <span>{t("modal.course.price.discount")}</span>
-                                    <span>-${discount} (10%)</span>
-                                </div>
+                                {discountPercent > 0 && (
+                                    <div className="flex justify-between items-center text-blue-600 font-semibold">
+                                        <span>{t("modal.course.price.discount")}</span>
+                                        <span>-${discount} ({discountPercent}%)</span>
+                                    </div>
+                                )}
                                 <div className="h-px bg-gray-200/60 my-0.5" />
                                 <div className="flex justify-between items-center text-base font-extrabold text-gray-900">
                                     <span>{t("modal.course.price.total")}</span>
@@ -244,7 +234,6 @@ export default function CourseModal() {
                                 </span>
                             </label>
 
-                            {/* Кнопки действий */}
                             <div className="grid grid-cols-2 gap-4 pt-2">
                                 <button
                                     type="button"

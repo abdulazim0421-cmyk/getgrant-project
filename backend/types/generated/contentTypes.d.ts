@@ -638,6 +638,44 @@ export interface ApiCountryCardCountryCard extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCourseCardCourseCard extends Struct.CollectionTypeSchema {
+  collectionName: 'course_cards';
+  info: {
+    displayName: 'CourseCard';
+    pluralName: 'course-cards';
+    singularName: 'course-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    course_groups: Schema.Attribute.Component<'course.course-group', true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.String;
+    discountPercent: Schema.Attribute.Integer;
+    durationWeeks: Schema.Attribute.Integer;
+    format: Schema.Attribute.String;
+    icon: Schema.Attribute.String;
+    lessonsCount: Schema.Attribute.Integer;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::course-card.course-card'
+    > &
+      Schema.Attribute.Private;
+    price: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID;
+    studentsCount: Schema.Attribute.Integer;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProgramsCardProgramsCard
   extends Struct.CollectionTypeSchema {
   collectionName: 'programs_cards';
@@ -1519,6 +1557,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::countries-home.countries-home': ApiCountriesHomeCountriesHome;
       'api::country-card.country-card': ApiCountryCardCountryCard;
+      'api::course-card.course-card': ApiCourseCardCourseCard;
       'api::programs-card.programs-card': ApiProgramsCardProgramsCard;
       'api::programs-home.programs-home': ApiProgramsHomeProgramsHome;
       'api::stat-card.stat-card': ApiStatCardStatCard;
