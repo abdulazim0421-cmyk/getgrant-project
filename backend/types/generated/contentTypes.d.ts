@@ -878,6 +878,39 @@ export interface ApiStatCardStatCard extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTeacherCardTeacherCard extends Struct.CollectionTypeSchema {
+  collectionName: 'teacher_cards';
+  info: {
+    displayName: 'TeacherCard';
+    pluralName: 'teacher-cards';
+    singularName: 'teacher-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    avatar: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    certificate: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    experienceYears: Schema.Attribute.Integer;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::teacher-card.teacher-card'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    rate: Schema.Attribute.Integer;
+    subject: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiUniversityCardUniversityCard
   extends Struct.CollectionTypeSchema {
   collectionName: 'university_cards';
@@ -1561,6 +1594,7 @@ declare module '@strapi/strapi' {
       'api::programs-card.programs-card': ApiProgramsCardProgramsCard;
       'api::programs-home.programs-home': ApiProgramsHomeProgramsHome;
       'api::stat-card.stat-card': ApiStatCardStatCard;
+      'api::teacher-card.teacher-card': ApiTeacherCardTeacherCard;
       'api::university-card.university-card': ApiUniversityCardUniversityCard;
       'api::university-home.university-home': ApiUniversityHomeUniversityHome;
       'plugin::content-releases.release': PluginContentReleasesRelease;
