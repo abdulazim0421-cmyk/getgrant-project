@@ -82,7 +82,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-md h-full max-w-[1440px] mx-auto">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group transition-all duration-300 hover:-translate-y-1 hover:shadow-md h-full">
             <div className="relative h-44 sm:h-48 w-full bg-slate-50 overflow-hidden shrink-0">
                 {finalImageUrl ? (
                     <Image

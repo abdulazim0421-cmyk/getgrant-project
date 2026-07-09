@@ -22,6 +22,7 @@ export default function Header() {
 
     const { lang, setLang, t } = useLanguage();
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -51,7 +52,10 @@ export default function Header() {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            const target = event.target as Node;
+            const clickedInsideDesktop = dropdownRef.current?.contains(target);
+            const clickedInsideMobile = mobileDropdownRef.current?.contains(target);
+            if (!clickedInsideDesktop && !clickedInsideMobile) {
                 setIsLangDropdownOpen(false);
             }
         };
@@ -97,23 +101,21 @@ export default function Header() {
     const currentLang = mounted ? lang : "ru";
 
     const navLinks = [
-        { href: `/${currentLang}/universities`, label: t("nav.universities"), icon: <GraduationCap size={18} /> },
-        { href: `/${currentLang}/countries`,    label: t("nav.countries"),    icon: <Globe size={18} /> },
-        { href: `/${currentLang}/programs`,     label: t("nav.programs"),     icon: <BookOpen size={18} /> },
-        { href: `/${currentLang}/onlineprep`,   label: t("nav.online"),       icon: <Clock size={18} /> },
-        { href: `/${currentLang}/about`,        label: t("nav.about"),        icon: <Users size={18} /> },
+        { href: `/${currentLang}/Universities`, label: t("nav.universities"), icon: <GraduationCap size={18} /> },
+        { href: `/${currentLang}/Countries`,    label: t("nav.countries"),    icon: <Globe size={18} /> },
+        { href: `/${currentLang}/Programs`,     label: t("nav.programs"),     icon: <BookOpen size={18} /> },
+        { href: `/${currentLang}/OnlinePrep`,   label: t("nav.online"),       icon: <Clock size={18} /> },
+        { href: `/${currentLang}/About`,        label: t("nav.about"),        icon: <Users size={18} /> },
     ];
 
     return (
         <>
-            {/* Внешний контейнер отвечает только за фон на всю ширину и бордер */}
             <header className={`fixed top-0 left-0 right-0 w-full z-50 border-b transition-all duration-300 ${
                 isScrolled
                     ? "bg-white shadow-sm border-[#EAECF0]"
                     : "bg-white/90 xl:bg-transparent backdrop-blur-md xl:backdrop-blur-none border-transparent"
             }`}>
 
-                {/* Внутренний контейнер: Ограничивает контент до 1440px, центрирует его и полностью сохраняет вашу оригинальную анимацию скролла */}
                 <div className={`max-w-[1440px] mx-auto px-4 lg:px-6 flex items-center justify-between border-b border-transparent transition-all duration-300 ${
                     isScrolled ? "py-3" : "py-4 xl:py-6"
                 }`}>
@@ -131,7 +133,6 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    scroll={false}
                                     className={`relative py-2 text-[15px] font-medium transition-colors duration-300 group/link ${
                                         isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-950"
                                     }`}
@@ -190,6 +191,33 @@ export default function Header() {
                             {t("nav.consultation")}
                         </Button>
 
+                        <div className="relative flex md:hidden" ref={mobileDropdownRef}>
+                            <button
+                                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                                aria-label={t("nav.language") === "nav.language" ? "Сменить язык" : t("nav.language")}
+                                className="p-2.5 bg-gray-50 text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-100 hover:text-blue-600 transition-colors"
+                            >
+                                <Globe size={19} />
+                            </button>
+
+                            {isLangDropdownOpen && mounted && (
+                                <div className="absolute right-0 top-full mt-1.5 w-20 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-50">
+                                    <button
+                                        onClick={() => { handleLanguageChange("ru", false); setIsLangDropdownOpen(false); }}
+                                        className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "ru" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    >
+                                        RU
+                                    </button>
+                                    <button
+                                        onClick={() => { handleLanguageChange("kg", false); setIsLangDropdownOpen(false); }}
+                                        className={`w-full flex items-center justify-center py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${currentLang === "kg" ? "text-blue-600 bg-blue-50/50" : "text-gray-600"}`}
+                                    >
+                                        KG
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
                         <button
                             onClick={() => setIsMobileMenuOpen(true)}
                             className="xl:hidden p-2.5 bg-gray-50 text-gray-900 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
@@ -201,7 +229,6 @@ export default function Header() {
                 </div>
             </header>
 
-            {/* Мобильное меню (осталось без изменений) */}
             <div className={`fixed inset-0 z-[100] ${isMobileMenuOpen ? "visible" : "invisible"}`}>
                 <div
                     className={`absolute inset-0 bg-gray-950/40 backdrop-blur-sm transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "opacity-0"}`}
@@ -218,21 +245,6 @@ export default function Header() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-1 p-1 bg-gray-50 border border-gray-100 rounded-xl mb-6">
-                        <button
-                            onClick={() => handleLanguageChange("ru", true)}
-                            className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "ru" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
-                        >
-                            RU
-                        </button>
-                        <button
-                            onClick={() => handleLanguageChange("kg", true)}
-                            className={`flex items-center justify-center py-2 rounded-lg text-xs font-bold transition-all ${currentLang === "kg" ? "bg-white text-blue-600 shadow-sm border border-gray-100" : "text-gray-500"}`}
-                        >
-                            KG
-                        </button>
-                    </div>
-
                     <nav className="flex flex-col gap-1 flex-grow overflow-y-auto pr-1">
                         {mounted && navLinks.map((link) => {
                             const isActive = pathname?.startsWith(link.href);
@@ -240,7 +252,6 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    scroll={false}
                                     onClick={handleCloseMobileMenu}
                                     className={`flex items-center gap-3.5 p-3.5 rounded-xl text-base font-semibold transition-all ${
                                         isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
