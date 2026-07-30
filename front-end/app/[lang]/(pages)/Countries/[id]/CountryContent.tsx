@@ -14,7 +14,7 @@ const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
 async function getCountry(slug: string) {
     try {
         const res = await fetch(
-            `${STRAPI_URL}/api/country-cards?filters[slug][$eq]=${slug}&populate=*`,
+            `${STRAPI_URL}/api/country-cards?filters[slug][$eqi]=${slug}&populate=*`,
             { next: { revalidate: 60 } }
         );
 
