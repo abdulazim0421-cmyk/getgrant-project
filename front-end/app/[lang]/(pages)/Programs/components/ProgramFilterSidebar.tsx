@@ -3,8 +3,9 @@
 import { Search } from "lucide-react";
 import { useLanguage } from "@/app/context/LanguageContext";
 
-const DIRECTIONS = ["Технологии", "Бизнес", "Медицина", "Инженерия", "Искусство", "IT"] as const;
-const LEVELS = ["Bachelor", "Master", "PhD", "Pre-Med", "Бакалавриат", "Магистратура"] as const;
+const DIRECTIONS = ["IT", "Бизнес", "Медицина", "Инженерия", "Искусство"] as const;
+
+const LEVELS = ["Bachelor", "Master", "PhD", "Pre-Med"] as const;
 
 export interface ProgramFilters {
     search: string;
@@ -21,12 +22,46 @@ interface ProgramFilterSidebarProps {
 }
 
 export default function ProgramFilterSidebar({ filters, onChange, onReset, isMobile = false, onClose }: ProgramFilterSidebarProps) {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
 
     const toggleItem = (key: "directions" | "levels", value: string) => {
         const current = filters[key];
         const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
         onChange({ ...filters, [key]: updated });
+    };
+
+    const getDirectionLabel = (dir: string): string => {
+        if (lang === "kg") {
+            const kyLabels: Record<string, string> = {
+                "IT": "IT",
+                "Бизнес": "Бизнес",
+                "Медицина": "Медицина",
+                "Инженерия": "Инженерия",
+                "Искусство": "Искусство",
+            };
+            return kyLabels[dir] || dir;
+        }
+        return dir;
+    };
+
+    const getLevelLabel = (level: string): string => {
+        if (lang === "kg") {
+            const kyLabels: Record<string, string> = {
+                "Bachelor": "Бакалавр",
+                "Master": "Магистр",
+                "PhD": "Доктор наук",
+                "Pre-Med": "Предмедицинский",
+            };
+            return kyLabels[level] || level;
+        }
+
+        const ruLabels: Record<string, string> = {
+            "Bachelor": "Бакалавриат",
+            "Master": "Магистратура",
+            "PhD": "Аспирантура",
+            "Pre-Med": "Предмедицинский",
+        };
+        return ruLabels[level] || level;
     };
 
     return (
@@ -52,7 +87,9 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
             </div>
 
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("programs.filter.direction")}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
+                    {t("programs.filter.direction")}
+                </p>
                 <div className="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1">
                     {DIRECTIONS.map((dir) => (
                         <label key={dir} className="flex items-center gap-3 cursor-pointer group select-none">
@@ -62,14 +99,18 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                                 onChange={() => toggleItem("directions", dir)}
                                 className="w-4.5 h-4.5 rounded-md border-gray-300 text-blue-600 accent-blue-600 cursor-pointer focus:ring-0"
                             />
-                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">{dir}</span>
+                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">
+                                {getDirectionLabel(dir)}
+                            </span>
                         </label>
                     ))}
                 </div>
             </div>
 
             <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">{t("programs.filter.level")}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">
+                    {t("programs.filter.level")}
+                </p>
                 <div className="flex flex-col gap-2.5">
                     {LEVELS.map((level) => (
                         <label key={level} className="flex items-center gap-3 cursor-pointer group select-none">
@@ -79,7 +120,9 @@ export default function ProgramFilterSidebar({ filters, onChange, onReset, isMob
                                 onChange={() => toggleItem("levels", level)}
                                 className="w-4.5 h-4.5 rounded-md border-gray-300 text-blue-600 accent-blue-600 cursor-pointer focus:ring-0"
                             />
-                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">{level}</span>
+                            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors font-medium">
+                                {getLevelLabel(level)}
+                            </span>
                         </label>
                     ))}
                 </div>
